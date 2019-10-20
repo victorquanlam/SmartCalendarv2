@@ -1,17 +1,12 @@
-import { Component, OnInit, NgZone, Pipe, PipeTransform, OnChanges  } from '@angular/core';
-import { AuthService } from "../../shared/services/auth.service";
-import { Router } from "@angular/router";
-import { AngularFireDatabase, AngularFireList} from '@angular/fire/database';
+import { Component, OnInit, NgZone, Pipe, PipeTransform } from '@angular/core';
+import { AuthService } from '../../shared/services/auth.service';
+import { Router } from '@angular/router';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxSpinnerService } from 'ngx-spinner';
 import { FilterPipe } from 'ngx-filter-pipe';
-import { TravelItinerary } from '../../travel-itinerary.model'
-import { TravelItineraryService } from '../../travel-itinerary.service'
-
-@Pipe({
-  name: 'itineraryFilter',
-  pure: false
-})
+import { TravelItinerary } from '../../travel-itinerary.model';
+import { TravelItineraryService } from '../../travel-itinerary.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +14,6 @@ import { TravelItineraryService } from '../../travel-itinerary.service'
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
 
   constructor(
     public authService: AuthService,
@@ -31,37 +25,35 @@ export class DashboardComponent implements OnInit {
     private travelItineraryService: TravelItineraryService
   ) { }
 
-
-  travelItinerary$: AngularFireList<any[]>;
   travelItineraries: Observable<any[]>;
-  isBusy: Boolean;
-  selectedValue: String;
-  filterDateMode: String;
-  availableOptions : any[];
-  dateFilter : Observable<any[]>;
+  isBusy: boolean;
+  selectedValue: string;
+  filterDateMode: string;
+  availableOptions: any[];
+  dateFilter: Observable<any[]>;
   travelItinerary: TravelItinerary[];
 
-  ngOnInit() { 
-    this.availableOptions =['None','Staff','Month'] 
-    this.selectedValue = 'None'
-    this.filterDateMode ='upcoming'
+  ngOnInit() {
+    this.availableOptions = ['None', 'Staff', 'Month'];
+    this.selectedValue = 'None';
+    this.filterDateMode = 'upcoming';
     this.spinner.show();
     setTimeout(() => {
       /** spinner ends after 5 seconds */
       this.spinner.hide();
     }, 2000);
-    this.travelItineraries = this.af.list('/TravelItinerary').valueChanges();
+    // this.travelItineraries = this.af.list('/TravelItinerary').valueChanges();
+    this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
+      this.travelItinerary = actionArray.map(e => {
+        // console.log(e);
+        return {
+          id: e.payload.doc.id,
+          ...e.payload.doc.data()
+        } as TravelItinerary;
+      });
+    });
     this.dateFilter = this.travelItineraries;
-    // this.travelItineraryService.getTravelItinerary().subscribe(data => {
-    //   this.travelItinerary = data.map( e=>{
-    //     return {
-    //       id: e.payload.doc.id,
-    //       ...e.payload.doc.data()
-    //     } as TravelItinerary
-    //   })
-    // })
   }
-
 
   addTravelItinerary(value: string): void {
     // ...
@@ -78,31 +70,14 @@ export class DashboardComponent implements OnInit {
     // ...
   }
 
-  ngOnChanges(changes) {
-    console.log(changes);
-}
-
-  setDateFilter (item) { 
-
-    if(item ==='None'){
-      console.log('yes')
-    } else if(item ==='Staff'){
-      console.log('no')
-    }else if(item ==='Month'){
-      console.log('haha')
+  setDateFilter (item) {
+    if (item === 'None') {
+      console.log('none');
+    } else if (item === 'Staff') {
+      console.log('staff');
+    } else if (item === 'Month') {
+      console.log('month');
     }
-
-    // if(this.filterDateMode==='upcoming') {
-    //   if(item.endsAt> new Date()){
-    //     return item
-    //   }
-    // } else if(this.filterDateMode==='past') {
-    //   if(item.endsAt< new Date()){
-    //     return item
-    //   }
-    // } else {
-    //   return item
-    // }
-  };
+  }
 
 }

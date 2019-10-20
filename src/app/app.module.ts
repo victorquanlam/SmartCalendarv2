@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 // Reactive Form
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from '@angular/forms';
 
 // App routing modules
 import { AppRoutingModule } from './shared/routing/app-routing.module';
@@ -16,32 +16,46 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
 
 // Firebase services + enviorment module
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 // Auth service
-import { AuthService } from "./shared/services/auth.service";
+import { AuthService } from './shared/services/auth.service';
 import { TimeTableComponent } from './components/time-table/time-table.component';
 import { ReportComponent } from './components/report/report.component';
 import { ManageComponent } from './components/manage/manage.component';
 import { ProfileComponent } from './components/profile/profile.component';
-
-//FireBase
+// FireBase
 import { AngularFireDatabaseModule , AngularFireDatabase } from '@angular/fire/database';
-
-
 import { NgxSpinnerModule } from 'ngx-spinner';
-
 import { FormsModule } from '@angular/forms';
-
-
 import { CallbackPipe } from './shared/pipes/callback.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSelectModule} from '@angular/material/select';
-
+import {
+  MatSelectModule,
+  MatInputModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
+  MatSortModule,
+  MatTableModule,
+  MatIconModule,
+  MatButtonModule,
+  MatCardModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatFormFieldModule } from '@angular/material';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { TravelItineraryService } from './travel-itinerary.service';
+import { AddTravelItineraryComponent } from './components/add-travel-itinerary/add-travel-itinerary.component';
+import { EditTravelItineraryComponent } from './components/edit-travel-itinerary/edit-travel-itinerary.component';
+import { AddTripComponent } from './components/add-trip/add-trip.component';
+
+import { TripFilter } from './shared/pipes/trips.pipe'
+import { FilterPipe } from './shared/pipes/filter.pipe';
+import { EditTripComponent } from './components/edit-trip/edit-trip.component';
+import { AddEventComponent } from './components/add-event/add-event.component'
 
 
 @NgModule({
@@ -55,23 +69,41 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     TimeTableComponent,
     ReportComponent,
     ManageComponent,
-    ProfileComponent
+    ProfileComponent,
+    AddTravelItineraryComponent,
+    EditTravelItineraryComponent,
+    AddTripComponent,
+    TripFilter,
+    FilterPipe,
+    EditTripComponent,
+    AddEventComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
     ReactiveFormsModule,
-    AngularFireDatabaseModule,
     NgxSpinnerModule,
     FormsModule,
     BrowserAnimationsModule,
     MatSelectModule,
-    FilterPipeModule
+    MatInputModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FilterPipeModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireDatabaseModule
   ],
-  providers: [AuthService,AngularFireDatabase],
+  providers: [AuthService, AngularFireDatabase, TravelItineraryService],
   bootstrap: [AppComponent]
 })
 

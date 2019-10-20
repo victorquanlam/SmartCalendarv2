@@ -1,6 +1,6 @@
 export class TravelItinerary {
-    id: String;
-    title: String;
-    startsAt: String;
-    endsAt: String;
+    id: string;
+    title: string;
+    startsAt: string;
+    endsAt: string;
   }

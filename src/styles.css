@@ -301,6 +301,35 @@ a:not([href]):not([tabindex]):hover {
   color: #E91E63;
 }
 
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: black !important;
+ }
+ .mat-form-field-label {
+  color: black !important;
+  font-family: 20px !important;
+ }
+
+ .mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+   color: black;
+ }
+
+ .mat-form-field-label:disabled{
+  color: black !important;
+  font-family: 20px !important;
+ }
+
+ ::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: black !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+ /*change color of underline when focused*/
+ background-color: black !important;;
+}
+
 /* * Content */
 [role="main"] {
   padding-top: 48px;
