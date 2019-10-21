@@ -16,11 +16,10 @@
         </li>
     </ul>
     <span class="nav-item my-lg-0">
-      <a class="nav-link" routerLink="/profile">
-        <button type="button" class="btn btn-circle btn-sm text-center">
-          <i class="fas fa-user user-icon"></i>
-        </button>
-      </a>
+        <a class="nav-link" routerLink="/profile">
+        <button type="button" mat-mini-fab color="lightgrey"><mat-icon>person</mat-icon></button>
+        <!-- <button type="button" class="btn btn-circle btn-sm text-center"><i class="fas fa-user user-icon"></i></button> -->
+        </a>
     </span>
 </nav>
 <!-- Sidebar navigation -->
@@ -60,10 +59,9 @@
                         <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngFor="let itinerary of travelItinerary" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">{{ itinerary.title?itinerary.title: 'Unknown Title' }}</h5>
-                                <small>in 3 days ago</small>
+                                <small>{{itinerary.startsAt.toDate() | niceDateFormatPipe}}</small>
                             </div>
                             <p class="mb-1">{{ itinerary.startsAt.toDate() | date }} - {{ itinerary.endsAt.toDate() | date }}</p>
-                            <small>Donec id elit non mi porta.</small>
                         </a>
                     </div>
                 </div>

@@ -85,7 +85,7 @@
                           <a [routerLink]="['/edit-event/', event.id]" *ngFor="let event of eventList | filter:{trip: trip} " class="list-group-item list-group-item-action flex-column align-items-start mb-2">
                               <div class="d-flex w-100 justify-content-between">
                                   <h5 class="mb-1">{{ event.title?event.title: 'Unknown Title' }}</h5>
-                                  <small>in 3 days ago</small>
+                                  <small>{{event.startsAt.toDate() | niceDateFormatPipe}}</small>
                               </div>
                               <p class="mb-1">{{ event.startsAt.toDate() | date }} - {{ event.endsAt.toDate() | date }}</p>
                               <small>{{event.location}}</small>

@@ -72,7 +72,7 @@
                             <a [routerLink]="['/edit-trip/', trip.id]" *ngFor="let trip of trips | filter:{travelItinerary: travelItinerary}" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ trip.title?trip.title: 'Unknown Title' }}</h5>
-                                    <small>in 3 days ago</small>
+                                    <small>{{trip.startsAt.toDate()| niceDateFormatPipe}}</small>
                                 </div>
                                 <p class="mb-1">{{ trip.startsAt.toDate() | date }} - {{ trip.endsAt.toDate() | date }}</p>
                                 <small>{{trip.location}}</small>

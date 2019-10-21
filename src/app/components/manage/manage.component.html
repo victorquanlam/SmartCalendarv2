@@ -1,3 +1,118 @@
-<p>
-    manage works!
-</p>
+<!-- Top navigation -->
+<nav class="navbar navbar-dark navbar-expand fixed-top bg-dark shadow p0 m0" aria-label="">
+    <a class="navbar-brand" routerLink="/dashboard">
+        <img class="brand-logo logo" src="assets/logo.png" alt="SmartCalendar logo">
+        <span class="dasboard-text">Dashboard</span>
+    </a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" routerLink="/time-table">Time Table</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" routerLink="/manage">Manage</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" routerLink="/report">Report</a>
+        </li>
+    </ul>
+    <span class="nav-item my-lg-0">
+      <a class="nav-link" routerLink="/profile">
+        <button type="button" mat-mini-fab color="lightgrey"><mat-icon>person</mat-icon></button>
+        </a>
+    </span>
+</nav>
+<!-- Sidebar navigation -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main content -->
+        <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-4">
+            <div class="inner-adjust">
+                <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
+                    <h1 class="h2 mt-auto mb-auto mr-2">Manage User</h1>
+                </div>
+                <!-- Show user data when logged in -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div *ngFor="let user of users" class="add-full-width pt-2">
+                            <button  class="userList add-full-width " (click)="pullUserDataClicked(user.uid)">
+                                    {{user.displayName?user.displayName:'Unknown DisplayName'}}
+                            </button>   
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="Display Name" formControlName="displayName">
+                                <mat-error>
+                                    <span *ngIf="!boardsForm.get('displayName').valid && boardsForm.get('displayName').touched">Please enter Display Name</span>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="First Name" formControlName="firstName">
+                                <mat-error>
+                                    <span *ngIf="!boardsForm.get('firstName').valid && boardsForm.get('firstName').touched">Please enter First Name</span>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="Last Name" formControlName="lastName">
+                                <mat-error>
+                                    <span *ngIf="!boardsForm.get('lastName').valid && boardsForm.get('lastName').touched">Please enter Last Name</span>
+                                </mat-error>
+                            </mat-form-field>
+
+
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="Email" formControlName="email">
+                                <mat-error>
+                                    <span *ngIf="!boardsForm.get('email').valid && boardsForm.get('email').touched">Please enter Email</span>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field class="add-full-width">
+                                    <input matInput placeholder="User Id" formControlName="uid" >
+                                    <mat-error>
+                                        <span *ngIf="!boardsForm.get('uid').valid && boardsForm.get('uid').touched"  >Please enter User Id</span>
+                                    </mat-error>
+                                </mat-form-field>
+
+
+                            <mat-form-field class="add-full-width">
+                                <mat-label>Role</mat-label>
+                                <mat-select formControlName="role">
+                                    <mat-option *ngFor="let role of roleList" [value]="role">{{role}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+
+
+
+                            <div class="button-row">
+                                <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-4">
+
+                            <br/>
+                            <input id="updateBtn" class="add-full-width" type="button" value="Update Employee" class="btn btn-primary manageButtons" ng-click="updateUser()" disabled/>
+                            <br/>
+                            <br/>
+                            <input id="addBtn" class="add-full-width" type="button" value="Add Employee" [disabled]="!boardsForm.valid" class="btn btn-primary manageButtons" ng-click="addUser()"/>
+                            <br/>
+                            <br/>
+                            <input id="passResetBtn" class="add-full-width" type="button" value="Reset Password" class="btn btn-primary manageButtons" ng-click="sendPasswordReset()" disabled/>
+                            <br/>
+                            <br/>
+                            <input id="deleteBtn" class="add-full-width" type="button"  value="Delete Employee" class="btn btn-primary manageButtons" ng-click="deleteUser()" disabled/>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
