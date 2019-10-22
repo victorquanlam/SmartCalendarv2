@@ -1,9 +1,10 @@
+
 export class Trip {
     id: string;
     title: string;
     location: string;
-    startsAt: string;
-    endsAt: string;
+    startsAt: any;
+    endsAt: any;
     travelItinerary: String;
     users: any[];
   }
