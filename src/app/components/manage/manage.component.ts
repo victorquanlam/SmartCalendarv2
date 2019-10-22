@@ -9,6 +9,7 @@ import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-manage',
+import { AuthService } from '../../shared/services/auth.service';
 })
 export class ManageComponent implements OnInit {
 
