@@ -17,12 +17,19 @@ export class ManageComponent implements OnInit {
   boardsForm: FormGroup;
   roleList =['Admin','Manager','User'];
   uid='';
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> parent of 308bd374... calendar work
   constructor(private userService: UserService,
     private router: Router, private route: ActivatedRoute,
     private ts: TravelItineraryService, private formBuilder: FormBuilder,
     public authService: AuthService) { }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 308bd374... calendar work
 
   ngOnInit() {
     this.getUser();
@@ -34,6 +41,7 @@ export class ManageComponent implements OnInit {
       'role' : [null, Validators.required],
       'uid' : [null, Validators.required],
     });
+<<<<<<< HEAD
   }
 
   getUser() {
@@ -58,6 +66,32 @@ export class ManageComponent implements OnInit {
 
   }
 
+=======
+  }
+
+  getUser() {
+    this.userService.getUsers().subscribe(actionArray => {
+      this.users = actionArray.map(e=>{
+        return {
+          uid:e.payload.doc.id,
+          ...e.payload.doc.data()
+        } as User
+      })
+    })
+  }
+
+  updateUser(){
+    this.userService.updateUser(this.uid, this.boardsForm)
+  }
+
+  sendPasswordReset () {
+    var email =(<HTMLInputElement>document.getElementById("email")).value;
+    //auth.sendPasswordResetEmail(email);
+    alert('A password reset email has been sent to: ' + email);
+          
+  }
+
+>>>>>>> parent of 308bd374... calendar work
   addUser() {
     this.userService.createUser(this.boardsForm);
     this.boardsForm = this.formBuilder.group({
@@ -101,4 +135,8 @@ export class ManageComponent implements OnInit {
 
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> parent of 308bd374... calendar work

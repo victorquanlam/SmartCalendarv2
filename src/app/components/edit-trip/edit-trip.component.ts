@@ -49,7 +49,6 @@ export class EditTripComponent implements OnInit {
     });
     this.boardsForm.disable()
 
-
     console.log(this.trip)
   }
 
@@ -73,7 +72,6 @@ export class EditTripComponent implements OnInit {
           ...e.payload.doc.data()
         } as Event
       })
-      console.log(this.eventList)
     })
     
   }

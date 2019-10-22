@@ -56,10 +56,13 @@ import { AddTripComponent } from './components/add-trip/add-trip.component';
 
 import { TripFilter } from './shared/pipes/trips.pipe'
 import { FilterPipe } from './shared/pipes/filter.pipe';
+import { niceDateFormatPipe } from './shared/pipes/nice-date-format.pipe';
 import { EditTripComponent } from './components/edit-trip/edit-trip.component';
 import { AddEventComponent } from './components/add-event/add-event.component'
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { ExcelService } from './excel.service';
 // import { calendarComponent } from './components/time-table/calender/calendar.component';
+
 
 @NgModule({
   declarations: [
@@ -80,6 +83,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     FilterPipe,
     EditTripComponent,
     AddEventComponent,
+    niceDateFormatPipe,
     // calendarComponent
   ],
   imports: [
@@ -112,7 +116,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       useFactory: adapterFactory
     })
   ],
-  providers: [AuthService, AngularFireDatabase, TravelItineraryService],
+  providers: [AuthService, AngularFireDatabase, TravelItineraryService,ExcelService],
   bootstrap: [AppComponent]
 })
 

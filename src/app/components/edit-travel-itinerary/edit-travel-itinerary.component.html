@@ -29,7 +29,7 @@
         <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-4">
             <div class="inner-adjust">
                 <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
-                    <h1 class="h2 mt-auto mb-auto mr-2">Travel Intinerary {{title}}</h1>
+                    <h1 class="h2 mt-auto mb-auto mr-2">Travel Itinerary {{title}}</h1>
                     <button type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
                     <div class="ml-auto p-2">
                         <button class="btn btn-danger" [routerLink]="['/add-trip/', travelItinerary]">Add Trip</button>
@@ -72,7 +72,7 @@
                             <a [routerLink]="['/edit-trip/', trip.id]" *ngFor="let trip of trips | filter:{travelItinerary: travelItinerary}" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ trip.title?trip.title: 'Unknown Title' }}</h5>
-                                    <small>in 3 days ago</small>
+                                    <small>{{trip.startsAt.toDate()| niceDateFormatPipe}}</small>
                                 </div>
                                 <p class="mb-1">{{ trip.startsAt.toDate() | date }} - {{ trip.endsAt.toDate() | date }}</p>
                                 <small>{{trip.location}}</small>

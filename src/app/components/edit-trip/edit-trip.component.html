@@ -47,6 +47,18 @@
                       <button class="btn btn-danger" [routerLink]="['/add-event/', trip]">Add Event</button>
                   </div>
               </div>
+
+              <!-- Button code -->
+            <div title="Add to Calendar" class="addeventatc">
+                Add to Calendar
+                <span class="start">{{trip.startsAt | date}}</span>
+                <span class="end">{{trip.endsAt | date}}</span>
+                <span class="timezone">Australia/Currie</span>
+                <span class="title">Trip to {{trip.location}}</span>
+                <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
+                <span class="description">{{trip.description ? trip.description : ''}}</span>
+                <span class="location">{{trip.location}}</span>
+            </div>
               <!-- Show user data when logged in -->
               <div class="row">
                   <div class="col-md-6">
@@ -97,7 +109,7 @@
                           <a [routerLink]="['/edit-event/', event.id]" *ngFor="let event of eventList | filter:{trip: trip} " class="list-group-item list-group-item-action flex-column align-items-start mb-2">
                               <div class="d-flex w-100 justify-content-between">
                                   <h5 class="mb-1">{{ event.title?event.title: 'Unknown Title' }}</h5>
-                                  <small>in 3 days ago</small>
+                                  <small>{{event.startsAt.toDate() | niceDateFormatPipe}}</small>
                               </div>
                               <p class="mb-1">{{ event.startsAt.toDate() | date }} - {{ event.endsAt.toDate() | date }}</p>
                               <small>{{event.location}}</small>
