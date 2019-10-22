@@ -35,6 +35,18 @@
                       <button class="btn btn-danger" [routerLink]="['/add-event/', trip]">Add Event</button>
                   </div>
               </div>
+
+              <!-- Button code -->
+            <div title="Add to Calendar" class="addeventatc">
+                Add to Calendar
+                <span class="start">{{trip.startsAt | date}}</span>
+                <span class="end">{{trip.endsAt | date}}</span>
+                <span class="timezone">Australia/Currie</span>
+                <span class="title">Trip to {{trip.location}}</span>
+                <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
+                <span class="description">{{trip.description ? trip.description : ''}}</span>
+                <span class="location">{{trip.location}}</span>
+            </div>
               <!-- Show user data when logged in -->
               <div class="row">
                   <div class="col-md-6">
