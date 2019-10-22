@@ -1,9 +1,11 @@
-import { Component, OnInit, NgZone, Pipe, PipeTransform, ChangeDetectionStrategy,
-ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component, OnInit, NgZone, Pipe, PipeTransform, ChangeDetectionStrategy,
+  ViewChild, TemplateRef
+} from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { Observable } from 'rxjs';
+import { Observable, generate } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { TravelItinerary } from '../../travel-itinerary.model';
@@ -20,7 +22,11 @@ import {
   endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours
+  addHours,
+  startOfMonth,
+  startOfWeek,
+  endOfWeek,
+  format
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -64,7 +70,8 @@ export class TimeTableComponent implements OnInit {
     private tripService: TripService,
     private eventService: EventService,
     public modal: NgbModal
-  ) { 
+  ) {
+    this.events = [];
   }
 
   travelItineraries: Observable<any[]>;
@@ -76,85 +83,144 @@ export class TimeTableComponent implements OnInit {
   travelItinerary: TravelItinerary[];
   trip: Trip[];
   eventList: Event[];
-
-  async ngOnInit() {
+  events: CalendarEvent[];
+  selectedOptions: any;
+  ngOnInit() {
     this.filterDateMode = 'upcoming';
     this.spinner.show();
-    
 
-    this.getTravelItitnerary();
-    this.getTrip();
-    this.getEvent();
-
-
-    ///need to wait for other functions to complete but not really
-    this.assignEvents();
-  }
-
-  //assign events
-
-  assignEvents() {
-    this.trip.forEach(function(snapshot){
-      //trips are in blue 
-      this.events.push({
-        id: snapshot.id,
-        title: snapshot.title,
-        start: new Date(snapshot.startsAt),
-        end: new Date(snapshot.endsAt),
-        color: colors.blue
-      })
-
-    })
-
-    //events are in yellow
-
-    this.eventList.forEach(function(snapshot) {
-      this.events.push({
-        id:snapshot.id,
-        title: snapshot.title,
-        start: new Date(snapshot.startsAt),
-        end: new Date(snapshot.endsAt),
-        color: colors.yellow
-      })
-    })
-  }
-
-  //get Data
-
-  async getTravelItitnerary(){
-    await this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
-      this.travelItinerary = actionArray.map(e => {
-        // console.log(e);
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as TravelItinerary;
+    // now we are waiting
+    this.getTravelItitnerary().then(() => {
+      this.getTrip().then(() => {
+        this.getEvent().then(() => {
+          this.assignEvents();
+        });
       });
     });
   }
 
-  async getTrip(){
-      await this.tripService.getTrips().subscribe(actionArray => {
+  //assign events
+  assignEvents(travelItinerary = []) {
+    // lists to filter trips and events
+    let filteredTrips = [];
+    let filteredEvents = [];
+    this.events = [];
+    // Calender Initialization
+    const getStart: any = {
+      month: startOfMonth,
+      week: startOfWeek,
+      day: startOfDay
+    }[this.view];
+    const getEnd: any = {
+      month: endOfMonth,
+      week: endOfWeek,
+      day: endOfDay
+    }[this.view];
+    // Dates format
+    const sDate = format(getStart(this.viewDate), 'YYYY-MM-DD');
+    const eDate = format(getEnd(this.viewDate), 'YYYY-MM-DD');
+    if (travelItinerary.length > 0) {
+      filteredTrips = this.trip.filter((trip) => {
+        return travelItinerary.indexOf(trip.travelItinerary) > -1
+      });
+    } else {
+      filteredTrips = this.trip;
+    }
+    if (travelItinerary.length > 0) {
+      for (let i = 0; i < this.eventList.length; i++) {
+        for (let j = 0; j < filteredTrips.length; j++) {
+          if (this.eventList[i].trip === filteredTrips[j].id) {
+            filteredEvents.push(this.eventList[i]);
+          }
+        }
+      }
+    } else {
+      filteredEvents = this.eventList;
+    }
+
+    //trips are in yellow
+    filteredTrips.map((snapshot) => {
+      this.events.push({
+        id: snapshot.id,
+        title: snapshot.title,
+        start: new Date(snapshot.startsAt.seconds * 1000),
+        end: new Date(snapshot.endsAt.seconds * 1000),
+        color: colors.blue
+      })
+    })
+    //events are in yellow
+    filteredEvents.map((snapshot) => {
+      this.events.push({
+        id: snapshot.id,
+        title: snapshot.title,
+        start: new Date(snapshot.startsAt.seconds * 1000),
+        end: new Date(snapshot.endsAt.seconds * 1000),
+        color: colors.yellow
+      })
+    })
+    // Generating view
+    this.events.map((e) => {
+      return this.generateEventView(e);
+    })
+  }
+
+  onNgModelChange(e) {
+    this.assignEvents(e);
+  }
+
+
+  generateEventView(e): any {
+    return {
+      title: e.title,
+      color: e.color,
+      start: e.start,
+      end: e.end,
+    };
+  }
+
+  //get Data
+
+  getTravelItitnerary() {
+    return new Promise((resolve, reject) => {
+      this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
+        this.travelItinerary = actionArray.map(e => {
+          // console.log(e);
+          return {
+            id: e.payload.doc.id,
+            ...e.payload.doc.data()
+          } as TravelItinerary;
+        });
+        resolve("completed");
+      })
+    });
+  }
+
+  getTrip() {
+    return new Promise((resolve, reject) => {
+      this.tripService.getTrips().subscribe(actionArray => {
         this.trip = actionArray.map(e => {
           return {
             id: e.payload.doc.id,
             ...e.payload.doc.data()
           } as Trip;
         });
-        
+        return resolve("completed");
       });
+    })
   }
 
-  async getEvent() {
-    await this.eventService.getEvents().subscribe(actionArray => {
-      this.eventList = actionArray.map(e => {
-        // console.log(e);
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Event;
+  getEvent() {
+    return new Promise((resolve, reject) => {
+      this.eventService.getEvents().subscribe(actionArray => {
+        this.eventList = actionArray.map(e => {
+          return {
+            id: e.payload.doc.id,
+            ...e.payload.doc.data()
+          } as Event;
+        });
+        return resolve("completed");
       });
-    });
+    })
   }
 
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
@@ -173,38 +239,6 @@ export class TimeTableComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-
-  //example events
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
-  ];
 
   activeDayIsOpen: boolean = true;
 

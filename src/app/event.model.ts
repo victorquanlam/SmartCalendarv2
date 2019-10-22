@@ -2,8 +2,8 @@ export class Event {
     id: string;
     title: string;
     location: string;
-    startsAt: string;
-    endsAt: string;
+    startsAt: any;
+    endsAt: any;
     trip: string;
     users: any[];
     airline: string;
