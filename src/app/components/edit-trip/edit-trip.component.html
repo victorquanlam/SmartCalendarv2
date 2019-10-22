@@ -30,6 +30,18 @@
           <div class="inner-adjust">
               <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
                   <h1 class="h2 mr-2">Trip {{title}}</h1>
+
+                  <!-- Button code -->
+                <div title="Add to Calendar" class="addeventatc">
+                    Add to Calendar
+                    <span class="start">{{trip.startsAt | date}}</span>
+                    <span class="end">{{trip.endsAt | date}}</span>
+                    <span class="timezone">Australia/Currie</span>
+                    <span class="title">Trip to {{trip.location}}</span>
+                    <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
+                    <span class="description">{{trip.description ? trip.description : ''}}</span>
+                    <span class="location">{{trip.location}}</span>
+                </div>
                   <button type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
                   <div class="ml-auto p-2">
                       <button class="btn btn-danger" [routerLink]="['/add-event/', trip]">Add Event</button>
