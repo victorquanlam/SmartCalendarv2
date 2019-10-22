@@ -1,0 +1,89 @@
+<!-- Top navigation -->
+<nav class="navbar navbar-dark navbar-expand fixed-top bg-dark shadow p0 m0" aria-label="">
+  <a class="navbar-brand" routerLink="/dashboard">
+      <img class="brand-logo logo" src="assets/logo.png" alt="SmartCalendar logo">
+      <span class="dasboard-text">Dashboard</span>
+  </a>
+  <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+          <a class="nav-link" routerLink="/time-table">Time Table</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" routerLink="/manage">Manage</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" routerLink="/report">Report</a>
+      </li>
+  </ul>
+  <span class="nav-item my-lg-0">
+    <a class="nav-link" routerLink="/profile">
+      <button type="button" mat-mini-fab color="lightgrey"><mat-icon>person</mat-icon></button>
+      <!-- <button type="button" class="btn btn-circle btn-sm text-center"><i class="fas fa-user user-icon"></i></button> -->
+      </a>
+  </span>
+</nav>
+<!-- Sidebar navigation -->
+<div class="container-fluid">
+  <div class="row">
+      <!-- Main content -->
+      <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-4">
+          <div class="inner-adjust">
+              <div class="pt-2 pb-2 mb-3 border-bottom">
+                  <h1 class="h2">Add New Event</h1>
+              </div>
+              <!-- Show user data when logged in -->
+              <div class="row">
+                  <div class="col-md-12">
+                      <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
+                          <mat-form-field class="add-full-width">
+                              <input matInput placeholder="Title" formControlName="title">
+                              <mat-error>
+                                  <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
+                              </mat-error>
+                          </mat-form-field>
+                          <mat-form-field class="add-full-width">
+                              <input matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Choose Start date">
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker #picker></mat-datepicker>
+                              <mat-error>
+                                  <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
+                              </mat-error>
+                          </mat-form-field>
+                          <mat-form-field class="add-full-width">
+                              <input matInput [matDatepicker]="endPicker" formControlName="endsAt" placeholder="Choose End date">
+                              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                              <mat-datepicker #endPicker></mat-datepicker>
+                              <mat-error>
+                                  <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
+                              </mat-error>
+                          </mat-form-field>
+                          
+                          <mat-form-field class="add-full-width">
+                            <input matInput placeholder="Location" formControlName="location">
+                            <mat-error>
+                                <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
+                            </mat-error>
+                          </mat-form-field>
+
+                        <mat-form-field class="add-full-width">
+                          <input matInput placeholder="Airline" formControlName="airline">
+                        </mat-form-field>
+
+                        <mat-form-field class="add-full-width">
+                          <input matInput placeholder="Flight Detail" formControlName="flightDetail">
+                        </mat-form-field>
+
+                        <mat-form-field class="add-full-width">
+                          <input matInput placeholder="Hotel" formControlName="hotel">
+                        </mat-form-field>
+
+                          <div class="button-row">
+                              <button type="submit" [disabled]="!boardsForm.valid" mat-fab color="primary"><mat-icon>save</mat-icon></button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </main>
+  </div>
+</div>
