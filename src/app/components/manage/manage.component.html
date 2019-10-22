@@ -1,3 +1,44 @@
-<p>
-    manage works!
-</p>
+<div class="container">
+    <div class="row">
+        <div class="col col-sm-4">
+            <div class="scrollable">
+                <div *ngFor="let user of users">
+                    <input class="userList" type="button" value="{{user.firstname + ' ' + user.lastname}}" ng-click="pullUserDataClicked(user.userid)"/>
+                </div>
+            </div>
+        </div>
+        <div class="col col-sm-4 manageForm">
+            <form>
+                <label for="firstName">First Name</label>
+                <input ng-value="firstNameInput" type="text" class="form-control" id="firstName"/>
+                <label for="lastName">Last Name</label>
+                <input ng-value="lastNameInput" type="text" class="form-control" id="lastName"/>
+                <label for="email">Email</label>
+                <input ng-value="emailInput" type="text" class="form-control" id="email"/>
+                <label for="phoneNo">Phone No.</label>
+                <input ng-value="phoneNoInput" type="text" class="form-control" id="phoneNo"/>
+                <label for="role">Role</label>
+                <select id="role" ng-model="selectedRole" class="form-control" ng-options="x for x in userRoleList">
+                    </select>
+                <label for="staffID">Staff ID</label>
+                <input ng-value="staffIDInput" type="text" class="form-control" id="staffID" readonly>/>
+            </form>
+        </div>
+        <div class="col col-sm-4 text-center">
+            <br/>
+            <input id="updateBtn" type="button" value="Update Employee" class="btn btn-primary manageButtons" ng-click="updateUser()" disabled/>
+            <br/>
+            <br/>
+            <input id="addBtn" type="button" value="Add Employee" class="btn btn-primary manageButtons" ng-click="addUser()"/>
+            <br/>
+            <br/>
+            <input id="passResetBtn" type="button" value="Reset Password" class="btn btn-primary manageButtons" ng-click="sendPasswordReset()" disabled/>
+            <br/>
+            <br/>
+            <input id="deleteBtn" type="button"  value="Delete Employee" class="btn btn-primary manageButtons" ng-click="deleteUser()" disabled/>
+        </div>
+    </div>
+</div>
+
+
+
