@@ -264,6 +264,7 @@ input:-moz-placeholder {
   padding-top: .5rem;
   overflow-x: hidden;
   overflow-y: auto;
+  max-width: 100% !important;
 }
 
 @supports ((position:-webkit-sticky) or (position:sticky)) {
@@ -476,6 +477,7 @@ body .navbar-brand {
 
 .sidebar-sticky {
   padding-top: 1.2rem !important;
+  width:100%;
 }
 
 /* Form */
