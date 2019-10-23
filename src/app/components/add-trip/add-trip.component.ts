@@ -75,12 +75,12 @@ export class AddTripComponent implements OnInit {
 
   onAutocompleteSelected(result: PlaceResult) {
     this.boardsForm.patchValue({
-      location: result
+      location: result.formatted_address
     })
   }
 
   onLocationSelected(result) {
-    
+
   }
 
   onFormSubmit(form: NgForm) {

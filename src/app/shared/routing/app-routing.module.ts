@@ -21,6 +21,7 @@ import { EditTripComponent } from '../../components/edit-trip/edit-trip.componen
 // Import canActivate guard services
 import { SecureInnerPagesGuard } from '../../shared/guard/secure-inner-pages.guard';
 import { AuthGuard } from '../guard/auth.guard';
+import { RoleGuardService } from '../guard/role-guard.service';
 
 // Include route guard in routes array
 const routes: Routes = [
@@ -37,7 +38,7 @@ const routes: Routes = [
   { path: 'time-table', component: TimeTableComponent, canActivate: [AuthGuard] },
   { path: 'report', component: ReportComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'manage', component: ManageComponent, canActivate: [AuthGuard] },
+  { path: 'manage', component: ManageComponent, canActivate: [AuthGuard,RoleGuardService],data: {role: 'Admin'}},
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [SecureInnerPagesGuard] },
   { path: 'verify-email-address', component: VerifyEmailComponent, canActivate: [SecureInnerPagesGuard] }
 ];

@@ -2,9 +2,11 @@ import { Component, OnInit , Pipe, PipeTransform} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TravelItineraryService } from '../../travel-itinerary.service';
 import { TripService } from '../../trip.service';
+import { EventService } from '../../event.service';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormsModule } from '@angular/forms';
 import { Trip } from 'src/app/trip.model';
+import { Event } from 'src/app/event.model';
 import { TravelItinerary } from 'src/app/travel-itinerary.model';
 import { AuthService } from '../../shared/services/auth.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -32,6 +34,7 @@ export class EditTravelItineraryComponent implements OnInit {
   id = '';
   isEditing=false;
   trips: Trip[];
+  events: Event[];
   travelItinerary= '';
   currentUser=this.authService.userData;
   closeResult: string;
@@ -44,12 +47,14 @@ public destination: any;
   constructor(private router: Router, private route: ActivatedRoute,
   private ts: TravelItineraryService, private formBuilder: FormBuilder,
   private tripService: TripService, public authService: AuthService,
-  private modalService: NgbModal) { }
+  private modalService: NgbModal,
+  private eventService: EventService) { }
 
   ngOnInit() {
     this.travelItinerary = this.route.snapshot.params['id']
     this.getTravelItinerary(this.travelItinerary);
     this.getTrips(this.travelItinerary).then(() => {
+      this.getEvents();
       // this.setValueForLocationList();
     });
     
@@ -70,7 +75,7 @@ public destination: any;
         this.boardsForm.setValue({
           title: tmp.title,
           startsAt: tmp.startsAt.toDate(),
-        endsAt: tmp.endsAt.toDate()
+         endsAt: tmp.endsAt.toDate()
         });
       }
     });
@@ -90,8 +95,32 @@ public destination: any;
   }); 
   }
 
+  getEvents() {
+    return new Promise((resolve, reject) => {
+    this.eventService.getEvents().subscribe(actionArray => {
+      this.events = actionArray.map(e=>{
+        return {
+          id:e.payload.doc.id,
+          ...e.payload.doc.data()
+        } as Event
+      });
+      resolve("completed");
+    })
+  }); 
+  }
+
   delete() {
     try{
+      // this.trips.forEach(function(snapshot){
+      //   if(snapshot.travelItinerary===this.route.snapshot.params['id']){
+      //     this.events.forEach(function(childSnapshot){
+      //       if(childSnapshot.trip === snapshot.id){
+      //         this.eventService.delete(childSnapshot.trip)
+      //       }
+      //     })
+      //     this.tripService.delete(snapshot.id)
+      //   }
+      // })
       this.ts.deleteTravelItinerary(this.route.snapshot.params['id']);
     } finally{
       this.router.navigate(['/dashboard/']);

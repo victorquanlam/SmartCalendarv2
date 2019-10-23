@@ -25,6 +25,7 @@ export class TravelItineraryService {
   updateTravelItinerary(id:string,data: any) {
     try{
       this.firestore.collection('TravelItinerary').doc(id).set(data);
+      
     } catch(err) {
       alert(err)
     }

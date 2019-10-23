@@ -50,26 +50,43 @@ export class ManageComponent implements OnInit {
   }
 
   updateUser(){
-    this.userService.updateUser(this.uid, this.boardsForm)
+    console.log(this.boardsForm.value)
+    this.userService.updateUser(this.uid,this.boardsForm.value)
   }
 
   sendPasswordReset () {
-    var email =(<HTMLInputElement>document.getElementById("email")).value;
-    //auth.sendPasswordResetEmail(email);
-    alert('A password reset email has been sent to: ' + email);
+    console.log(this.boardsForm)
+    this.authService.ForgotPassword(this.boardsForm['email']);
 
   }
 
   addUser() {
-    this.userService.createUser(this.boardsForm);
-    this.boardsForm = this.formBuilder.group({
+    if((<HTMLInputElement>document.getElementById("addBtn")).value === 'Clear Fields to Add'){
+      (<HTMLInputElement>document.getElementById("addBtn")).value = 'Add Employee';
+      this.boardsForm = this.formBuilder.group({
+        'displayName' : [null, Validators.required],
+        'email' : [null],
+        'firstName' : [null],
+        'lastName' : [null],
+        'role' : [null, Validators.required],
+        'uid' : [null]
+      });
+      this.boardsForm.controls['uid'].disable()
+    }
+    else {
+      this.userService.createUser(this.boardsForm.value);
+      this.boardsForm = this.formBuilder.group({
       'displayName' : [null, Validators.required],
       'email' : [null],
       'firstName' : [null],
       'lastName' : [null],
       'role' : [null, Validators.required],
-      'uid' : [null, Validators.required],
+      'uid' : [null],
     });
+    this.boardsForm.controls['uid'].disable()
+    this.getUser();
+    }
+    
   }
 
   deleteUser() {
@@ -85,20 +102,21 @@ export class ManageComponent implements OnInit {
   pullUserDataClicked(id) {
     (<HTMLInputElement>document.getElementById("updateBtn")).disabled =false;
     (<HTMLInputElement>document.getElementById("deleteBtn")).disabled =false;
-    (<HTMLInputElement>document.getElementById("deletepassResetBtnBtn")).disabled =false;
-    (<HTMLInputElement>document.getElementById("addBtn")).disabled =true;
+    (<HTMLInputElement>document.getElementById("passResetBtn")).disabled =false;
+    (<HTMLInputElement>document.getElementById("addBtn")).disabled =false;
     (<HTMLInputElement>document.getElementById("addBtn")).value = 'Clear Fields to Add';
     this.userService.getOneUser(id).subscribe(data => {
       const tmp: any = data.payload.data();
       if(tmp) {
-        this.uid = tmp.uid;
+        this.uid = id;
         this.boardsForm.setValue({
+          uid: id,
           displayName: tmp.displayName?tmp.displayName:'',
           email:tmp.email,
           firstName: tmp.firstName?tmp.firstName:'',
           lastName: tmp.lastName?tmp.lastName:'',
-          role: tmp.role?tmp.role:'',
-          uid: tmp.uid
+          role: tmp.role?tmp.role:''
+          
         });
         this.boardsForm.controls['uid'].disable()
       }

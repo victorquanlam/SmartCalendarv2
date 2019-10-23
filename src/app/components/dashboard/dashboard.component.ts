@@ -69,7 +69,7 @@ export class DashboardComponent implements OnInit {
         }
       })
 
-      this.filterTravelItinerary = itineraries
+      this.filterTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()})
       this.spinner.hide();
     })
   }
@@ -97,6 +97,7 @@ export class DashboardComponent implements OnInit {
             ...e.payload.doc.data()
           } as User
         })
+        resolve("completed");
       })
     });
   }
@@ -139,6 +140,11 @@ export class DashboardComponent implements OnInit {
     return result
   }
 
+
+  sortFunc (a: TravelItinerary, b:TravelItinerary) {
+    return a.startsAt.toDate() - b.startsAt.toDate()
+  }
+
   checkIfInMonth (month,item) :any {
     var result = false;
   
@@ -171,7 +177,8 @@ export class DashboardComponent implements OnInit {
           }
         })
       }
-      this.filterTravelItinerary = itineraries
+      this.filterTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()
+      })
 }
 
 

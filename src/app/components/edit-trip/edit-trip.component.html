@@ -34,7 +34,7 @@
                   <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
 
                   <div class="ml-auto p-2">
-                      <button class="btn btn-danger" [routerLink]="['/add-event/', trip]">Add Event</button>
+                      <button class="btn btn-success" [routerLink]="['/add-event/', trip]">Add Event</button>
                   </div>
               </div>
               <!-- Show user data when logged in -->
@@ -61,11 +61,16 @@
                                     <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
                                 </mat-error>
                           </mat-form-field>
-                    <mat-form-field class="add-full-width">
+                          
+                          <mat-error class="add-full-width custom-validator-error">
+                            <span *ngIf="boardsForm.errors">Start Date should be less than End Date</span>
+                        </mat-error>
+
+                            <mat-form-field class="add-full-width">
                             <input matInput
                                 placeholder="Location" formControlName="location"
                                 matGoogleMapsAutocomplete
-                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                                (onAutocompleteSelected)="onAutocompleteSelectedHotel($event)"
                                 (onLocationSelected)="onLocationSelected($event)">
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>

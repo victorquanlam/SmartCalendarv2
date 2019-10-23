@@ -52,7 +52,7 @@ export class EditTripComponent implements OnInit {
       'endsAt' : [null, Validators.required],
       'location' : [null, Validators.required],
       'users': []
-    });
+    },{validator: this.dateLessThan('startsAt', 'endsAt')});
     this.boardsForm.disable()
 
 
@@ -85,11 +85,24 @@ export class EditTripComponent implements OnInit {
   }
 
 
-  onAutocompleteSelected(result: PlaceResult) {
+  onAutocompleteSelected (result: PlaceResult) {
     console.log(result)
     this.boardsForm.patchValue({
       location: result.formatted_address
     })
+  }
+
+  private dateLessThan(from: string, to: string) {
+    return (group: FormGroup): {[key: string]: any} => {
+     let f = group.controls[from];
+     let t = group.controls[to];
+     if (f.value > t.value) {
+       return {
+         dates: "Date from should be less than Date to"
+       };
+     }
+     return {};
+    }
   }
 
   onLocationSelected(location: Location) {
