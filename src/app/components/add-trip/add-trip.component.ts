@@ -79,6 +79,10 @@ export class AddTripComponent implements OnInit {
     })
   }
 
+  onLocationSelected(result) {
+    
+  }
+
   onFormSubmit(form: NgForm) {
     this.ts.createTrip(form);
     this.router.navigate(['/edit-travel-itinerary/',this.route.snapshot.params['id']]);

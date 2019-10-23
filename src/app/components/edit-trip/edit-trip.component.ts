@@ -92,11 +92,11 @@ export class EditTripComponent implements OnInit {
     })
   }
 
-  // onLocationSelected(location: Location) {
-  //   console.log('onLocationSelected: ', location);
-  //   this.latitude = location.latitude;
-  //   this.longitude = location.longitude;
-  // }
+  onLocationSelected(location: Location) {
+    console.log('onLocationSelected: ', location);
+    // this.latitude = location.latitude;
+    // this.longitude = location.longitude;
+  }
 
 
   delete() {

@@ -77,6 +77,9 @@ export class ReportComponent implements OnInit {
       });
     });
 
+
+  
+
     this.eventService.getEvents().subscribe(actionArray => {
       this.event = actionArray.map(e => {
         // console.log(e);
@@ -96,6 +99,17 @@ export class ReportComponent implements OnInit {
         } as Trip;
       });
     });
+  }
+
+
+
+  onFormSubmit(result){
+    console.log('yes')
+  }
+
+
+  exportAsXLSX() {
+
   }
 
 }

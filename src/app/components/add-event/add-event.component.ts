@@ -85,6 +85,10 @@ export class AddEventComponent implements OnInit {
   }
 
 
+  onLocationSelected(result){
+    console.log(result)
+  }
+
   onAutocompleteSelected(result: PlaceResult) {
     this.boardsForm.patchValue({
       location: result.formatted_address

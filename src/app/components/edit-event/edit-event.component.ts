@@ -94,6 +94,10 @@ export class EditEventComponent implements OnInit {
     })
   }
 
+  onLocationSelected(result) {
+    console.log(result)
+  }
+
   enableEdit() {
     this.isEditing=true;
     this.boardsForm.enable()

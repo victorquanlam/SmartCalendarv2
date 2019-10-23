@@ -18,6 +18,7 @@ export class ManageComponent implements OnInit {
   boardsForm: FormGroup;
   roleList =['Admin','Manager','User'];
   uid='';
+  isEditing=false;
 
   constructor(private userService: UserService,
     private router: Router, private route: ActivatedRoute,
@@ -74,6 +75,11 @@ export class ManageComponent implements OnInit {
   deleteUser() {
     //need to have confirmation box
     this.userService.deleteUser(this.uid)
+  }
+
+
+  onFormSubmit(result) {
+
   }
 
   pullUserDataClicked(id) {

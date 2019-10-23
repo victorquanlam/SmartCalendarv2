@@ -44,7 +44,7 @@
                               </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
-                              <input [value]="startsAt" matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Start Date">
+                              <input matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Start Date">
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                               <mat-datepicker #picker></mat-datepicker>
                               <mat-error>

@@ -33,7 +33,6 @@ import { AngularFireDatabaseModule , AngularFireDatabase } from '@angular/fire/d
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { CallbackPipe } from './shared/pipes/callback.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -66,7 +65,7 @@ import { FilterPipe } from './shared/pipes/filter.pipe';
 import { EditTripComponent } from './components/edit-trip/edit-trip.component';
 import { AddEventComponent } from './components/add-event/add-event.component'
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-// import { calendarComponent } from './components/time-table/calender/calendar.component';
+import { calendarComponent } from './components/time-table/calender/calendar.component';
 import { niceDateFormatPipe } from './shared/pipes/nice-date-format.pipe';
 import { ExcelService } from './excel.service';
 import { OwlDateTimeModule, OwlNativeDateTimeModule,OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
@@ -76,7 +75,8 @@ import { AgmCoreModule } from '@agm/core';
 
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 
-import { AgmDirectionModule } from 'agm-direction';   // agm-direction
+import { AgmDirectionModule } from 'agm-direction';
+import { ServiceWorkerModule } from '@angular/service-worker';   // agm-direction
 
 @NgModule({
   declarations: [
@@ -100,7 +100,7 @@ import { AgmDirectionModule } from 'agm-direction';   // agm-direction
     niceDateFormatPipe,
     EditEventComponent,
     DialogContentExampleDialogComponent,
-    // calendarComponent
+    calendarComponent
   ],
   imports: [
     OwlDateTimeModule, 
@@ -143,7 +143,8 @@ import { AgmDirectionModule } from 'agm-direction';   // agm-direction
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [DialogContentExampleDialogComponent],
   providers: [AuthService, AngularFireDatabase, TravelItineraryService,ExcelService,{provide: OWL_DATE_TIME_LOCALE, useValue: 'en-au'},{ provide: MAT_DATE_LOCALE, useValue: 'en-au' }],
