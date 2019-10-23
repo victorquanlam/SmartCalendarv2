@@ -4,6 +4,7 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { UserService } from '../../user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
-    public router: Router,
+    public router: Router,private userService: UserService,
     public ngZone: NgZone // NgZone service to remove outside scope warning
   ) {
     /* Saving user data in localstorage when
@@ -82,13 +83,12 @@ export class AuthService {
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
-      if (user.emailVerified !== false) {
-        window.alert('You need to have permission from Admin.');
+      if (!user.emailVerified) {
+        window.alert('You need to verified your email.');
       }
     }
-    return (user !== null) ? true : false;
     // will turn this on when we can set emailVerified by Admin
-    // return (user !== null && user.emailVerified !== false) ? true : false;
+    return (user !== null && user.emailVerified !== false) ? true : false;
 
   }
 
@@ -115,20 +115,23 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
+      firstName: user.firstName?user.firstName:'',
+      lastName: user.lastName?user.lastName:'',
+      role: user.role?user.role:'',
     };
+    console.log(userData)
     return userRef.set(userData, {
       merge: true
     });
   }
+
 
   // Sign out
   SignOut() {

@@ -44,7 +44,9 @@ export class AddEventComponent implements OnInit {
 
   getTrip() {
     this.tripService.getOneTrip(this.route.snapshot.params['id']).subscribe(data => {
+      
       const tmp: any = data.payload.data();
+      console.log(tmp)
       if (tmp) {
         this.boardsForm.patchValue({
           startsAt: tmp.startsAt.toDate(),
@@ -94,5 +96,7 @@ export class AddEventComponent implements OnInit {
       location: result.formatted_address
     })
   }
+
+
 
 }

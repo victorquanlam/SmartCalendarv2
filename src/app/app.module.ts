@@ -77,6 +77,8 @@ import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/go
 
 import { AgmDirectionModule } from 'agm-direction';
 import { ServiceWorkerModule } from '@angular/service-worker';   // agm-direction
+import { DatePipe } from '@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -147,7 +149,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';   // agm-directio
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [DialogContentExampleDialogComponent],
-  providers: [AuthService, AngularFireDatabase, TravelItineraryService,ExcelService,{provide: OWL_DATE_TIME_LOCALE, useValue: 'en-au'},{ provide: MAT_DATE_LOCALE, useValue: 'en-au' }],
+  providers: [AuthService, AngularFireDatabase, TravelItineraryService,ExcelService,{provide: OWL_DATE_TIME_LOCALE, useValue: 'en-au'},{ provide: MAT_DATE_LOCALE, useValue: 'en-au' },DatePipe],
   bootstrap: [AppComponent]
 })
 

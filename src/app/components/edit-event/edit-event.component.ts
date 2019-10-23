@@ -94,6 +94,12 @@ export class EditEventComponent implements OnInit {
     })
   }
 
+  onAutocompleteSelectedHotel(result: PlaceResult) {
+    this.boardsForm.patchValue({
+      hotel: result.formatted_address
+    })
+  }
+
   onLocationSelected(result) {
     console.log(result)
   }

@@ -45,17 +45,15 @@
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field class="add-full-width">
-                                <input matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Choose Start date">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
+                                <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                                <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
                                 <mat-error>
                                     <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field class="add-full-width">
-                                <input matInput [matDatepicker]="endPicker" formControlName="endsAt" placeholder="Choose End date">
-                                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                                <mat-datepicker #endPicker></mat-datepicker>
+                                <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
                                 <mat-error>
                                     <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
                                 </mat-error>
@@ -82,10 +80,7 @@
   
                           <mat-form-field class="add-full-width">
                             <input matInput
-                                 placeholder="Hotel" formControlName="hotel"
-                                matGoogleMapsAutocomplete
-                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                                (onLocationSelected)="onLocationSelected($event)">
+                                 placeholder="Hotel" formControlName="hotel">
                           </mat-form-field>
   
                           <mat-form-field class="add-full-width">

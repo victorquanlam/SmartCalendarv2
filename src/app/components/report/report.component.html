@@ -59,6 +59,10 @@
                                   <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
                               </mat-error>
                           </mat-form-field>
+
+                          <mat-error class="add-full-width custom-validator-error">
+                            <span *ngIf="boardsForm.errors">Start Date should be less than End Date</span>
+                        </mat-error>
                           <!-- <div class="button-row text-center">
                               <button type="submit" [disabled]="!boardsForm.valid" class="btn btn-primary">Generate CSV File</button>
                           </div> -->

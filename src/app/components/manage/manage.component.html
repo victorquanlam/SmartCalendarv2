@@ -99,16 +99,16 @@
                     <div class="col-md-4">
 
                             <br/>
-                            <input id="updateBtn" class="add-full-width" type="button" value="Update Employee" class="btn btn-primary manageButtons" ng-click="updateUser()" disabled/>
+                            <input id="updateBtn" class="add-full-width" type="button" value="Update Employee" class="btn btn-primary manageButtons" (click)="updateUser()" disabled/>
                             <br/>
                             <br/>
-                            <input id="addBtn" class="add-full-width" type="button" value="Add Employee" [disabled]="!boardsForm.valid" class="btn btn-primary manageButtons" ng-click="addUser()"/>
+                            <input id="addBtn" class="add-full-width" type="button" value="Add Employee" [disabled]="!boardsForm.valid" class="btn btn-primary manageButtons" (click)="addUser()"/>
                             <br/>
                             <br/>
-                            <input id="passResetBtn" class="add-full-width" type="button" value="Reset Password" class="btn btn-primary manageButtons" ng-click="sendPasswordReset()" disabled/>
+                            <input id="passResetBtn" class="add-full-width" type="button" value="Reset Password" class="btn btn-primary manageButtons" (click)="sendPasswordReset()" disabled/>
                             <br/>
                             <br/>
-                            <input id="deleteBtn" class="add-full-width" type="button"  value="Delete Employee" class="btn btn-primary manageButtons" ng-click="deleteUser()" disabled/>
+                            <input id="deleteBtn" class="add-full-width" type="button"  value="Delete Employee" class="btn btn-primary manageButtons" (click)="deleteUser()" disabled/>
 
                     </div>
                 </div>
