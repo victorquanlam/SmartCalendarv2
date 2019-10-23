@@ -288,13 +288,19 @@ input:-moz-placeholder {
   text-transform: uppercase;
 }
 
+.navbar-brand {
+  margin-right: 6px;
+}
+
 .nav-link {
   cursor: pointer;
 }
 .link-active , .dasboard-text-active {
   color: white!important;
 }
-
+.dasboard-text-active { 
+  font-size: 16px!important;
+}
 
 .sidebar .nav-link.active,
 .sidebar a:hover,
@@ -653,16 +659,18 @@ body .table thead th {
   }
 
   .navbar-nav {
-    float: right;
-    width: 50%;
+    float: none;
+    padding:auto;
     text-align: right;
     display: inherit;
     margin: 0;
+    margin-left:auto!important;
   }
 
   .navbar-dark .navbar-brand {
+    padding-left:16px;
+    padding-right:16px;
     margin: 0;
-    width: 50%;
     float: left;
     display: inherit;
   }
@@ -692,6 +700,13 @@ body .table thead th {
 
   .displayTable {
     background: white
+  }
+
+  .fixed-top {
+    position: absolute;
+  overflow: hidden;
+  bottom: 0;
+  top:unset;
   }
 
   .authBlock {
