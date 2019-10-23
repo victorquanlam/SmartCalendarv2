@@ -36,3 +36,17 @@
 .user-icon {
     margin: auto;
 }
+
+.usersList {
+    overflow-y: auto;
+    padding: 10px;
+    background: #007bff;
+}
+
+/*highlight header */
+.highlight{
+    border-left: 6px solid #1976D2;
+    padding: 10px;
+    width: 250px;
+    background: whitesmoke;
+}

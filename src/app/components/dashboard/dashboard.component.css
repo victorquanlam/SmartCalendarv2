@@ -47,6 +47,19 @@
     animation: spin 2s linear infinite;
 }
 
+/*highlight header */
+.highlight{
+    border-left: 6px solid #1976D2;
+    padding: 10px;
+    width: 160px;
+    background: whitesmoke;
+}
+
+/*highlight items */
+.highlightItems{
+    border-left: 6px solid #AD2121;
+    padding-top: 15px;
+}
 
 /* Safari */
 
