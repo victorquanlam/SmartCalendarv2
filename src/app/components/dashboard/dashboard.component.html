@@ -45,28 +45,67 @@
                             </mat-select>
                         </mat-form-field>
                         <div class="btn-group ml-auto p-2">
-                            <label class="btn btn-primary m-0" (ngModel)="filterDateMode" uib-btn-radio="'upcoming'">Up Next</label>
-                            <label class="btn btn-primary m-0" (ngModel)="filterDateMode" uib-btn-radio="'past'">Past</label>
+                            <mat-slide-toggle 
+                                [checked]="filterDateMode === 'Current' ? true : false"
+                                (change)="setValue( $event )">
+                                {{filterDateMode}}
+                            </mat-slide-toggle>
                         </div>
                         <div class="ml-auto p-2">
-                            <button class="btn btn-danger" routerLink="/add-travel-itinerary">Add</button>
+                            <button class="btn btn-success" routerLink="/add-travel-itinerary">Add</button>
                         </div>
                     </div>
                 </div>
                 <!-- Show user data when logged in -->
-                <div class="row max-width">
+                <!-- show when mode is none -->
+                <div class="row max-width" *ngIf="selectedViewMode=='none'"> 
                     <div class="list-group max-width min-height">
-                        <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngFor="let itinerary of travelItinerary" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{ itinerary.title?itinerary.title: 'Unknown Title' }}</h5>
+                        <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngFor="let itinerary of filterTravelItinerary" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
+                            <div class="d-flex w-100 justify-content-between" >
+                                <h6 class="mb-1">{{ itinerary.title?itinerary.title: 'Unknown Title' }}</h6>
                                 <small>{{itinerary.startsAt.toDate() | niceDateFormatPipe}}</small>
                             </div>
                             <p class="mb-1">{{ itinerary.startsAt.toDate() | date }} - {{ itinerary.endsAt.toDate() | date }}</p>
-                            <small>Donec id elit non mi porta.</small>
                         </a>
                     </div>
                 </div>
+
+                <div class="row max-width min-height" *ngIf="selectedViewMode=='staff'">
+                    <div class="col col-md-4 col-sm-6 col-xs-12 mb-2" *ngFor="let user of users">
+                        <div class="card " >
+                            <div class="card-body ">
+                                    <h6 class="mb-1"> {{user.displayName?user.displayName:' Unknown Name'}}</h6>
+                            <div *ngFor="let itinerary of travelItinerary">
+                                <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngIf="checkIfInEmail(trip,user.email)">
+                                    {{itinerary.title}}
+                                </a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row max-width min-height" *ngIf="selectedViewMode=='month'">
+                        <div class="col col-md-4 col-sm-6 col-xs-12 mb-2" *ngFor="let month of listOfMonths">
+                            <div class="card " >
+                                <div class="card-body ">
+                                        <h6 class="mb-1"> {{month}}</h6>
+                                    <div *ngFor="let itinerary of travelItinerary">
+                                    <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngIf="checkIfInMonth(month,itinerary.startsAt)">
+                                        {{itinerary.title}}
+                                    </a>
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
             </div>
         </main>
     </div>
+
+
+
+
 </div>
+
+

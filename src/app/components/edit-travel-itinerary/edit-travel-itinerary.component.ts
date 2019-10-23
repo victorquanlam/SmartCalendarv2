@@ -7,6 +7,7 @@ import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Valida
 import { Trip } from 'src/app/trip.model';
 import { TravelItinerary } from 'src/app/travel-itinerary.model';
 import { AuthService } from '../../shared/services/auth.service';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Pipe({ name: 'TripFilter' })
@@ -14,9 +15,15 @@ import { AuthService } from '../../shared/services/auth.service';
 @Component({
   selector: 'app-edit-travel-itinerary',
   templateUrl: './edit-travel-itinerary.component.html',
-  styleUrls: ['./edit-travel-itinerary.component.css']
+  styleUrls: ['./edit-travel-itinerary.component.css'],
+  
 })
+
+
 export class EditTravelItineraryComponent implements OnInit {
+  public lat = 24.799448;
+  public lng = 120.979021;
+
 
   boardsForm: FormGroup;
   title = '';
@@ -27,22 +34,31 @@ export class EditTravelItineraryComponent implements OnInit {
   trips: Trip[];
   travelItinerary= '';
   currentUser=this.authService.userData;
+  closeResult: string;
+
+  listOfLocations=[];
+
+  public origin: any;
+public destination: any;
 
   constructor(private router: Router, private route: ActivatedRoute,
   private ts: TravelItineraryService, private formBuilder: FormBuilder,
-  private tripService: TripService, public authService: AuthService) { }
+  private tripService: TripService, public authService: AuthService,
+  private modalService: NgbModal) { }
 
   ngOnInit() {
     this.travelItinerary = this.route.snapshot.params['id']
     this.getTravelItinerary(this.travelItinerary);
-    this.getTrips(this.travelItinerary );
+    this.getTrips(this.travelItinerary).then(() => {
+      // this.setValueForLocationList();
+    });
     
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
       'endsAt' : [null, Validators.required]
     });
-    this.boardsForm.disable()
+    
   }
 
   getTravelItinerary(id) {
@@ -61,14 +77,43 @@ export class EditTravelItineraryComponent implements OnInit {
   }
 
   getTrips(id) {
+    return new Promise((resolve, reject) => {
     this.tripService.getTrips().subscribe(actionArray => {
       this.trips = actionArray.map(e=>{
         return {
           id:e.payload.doc.id,
           ...e.payload.doc.data()
         } as Trip
-      })
+      });
+      resolve("completed");
     })
+  }); 
+  }
+
+  delete() {
+    try{
+      this.ts.deleteTravelItinerary(this.route.snapshot.params['id']);
+    } finally{
+      this.router.navigate(['/dashboard/']);
+    }
+  }
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 
   enableEdit() {
@@ -85,5 +130,34 @@ export class EditTravelItineraryComponent implements OnInit {
     this.ts.updateTravelItinerary(this.route.snapshot.params['id'], travelItinerary);
     this.boardsForm.disable();
   }
+
+
+  setValueForLocationList () {
+    this.trips.forEach(function(snapshot){
+      this.openMap(snapshot.location)
+    })
+  }
+
+
+   openMap (event):void {
+    var geocoder = new google.maps.Geocoder();
+    var address = event;
+    var latitude;
+    var longitude;
+    console.log(event)
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        latitude = results[0].geometry.location.lat();
+        longitude = results[0].geometry.location.lng();
+      }
+      if(this.listOfLocations.length===0){
+        this.lat =latitude;
+        this.long = longitude;
+      }
+      console.log(this.listOfLocations)
+      this.listOfLocations.push({lat:latitude,long:longitude})
+      console.log(this.listOfLocations)
+    }); 
+  };
 
 }

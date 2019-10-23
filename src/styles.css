@@ -1,5 +1,6 @@
 @import 'https://use.fontawesome.com/releases/v5.5.0/css/all.css';
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 
 * {
   -webkit-box-sizing: border-box;
@@ -443,6 +444,12 @@ input.ng-invalid.ng-touched {
   cursor: not-allowed;
 }
 
+
+agm-map {
+  height: 300px !important;
+  width: 100%!important;  /* This is really important*/
+}
+
 /* Nav */
 body .navbar {
   padding:0 !important;
@@ -697,3 +704,9 @@ body .table thead th {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+.custom-validator-error{
+  font-size: 75%;
+}

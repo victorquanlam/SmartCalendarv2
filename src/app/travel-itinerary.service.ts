@@ -32,7 +32,12 @@ export class TravelItineraryService {
   }
 
   deleteTravelItinerary(travelItineraryId: string) {
-    this.firestore.doc('TravelItinerary/' + travelItineraryId).delete();
+    try{
+      this.firestore.doc('TravelItinerary/' + travelItineraryId).delete();
+    } catch(err){
+      alert(err)
+    }
+    
   }
 
 }

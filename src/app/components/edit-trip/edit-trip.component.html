@@ -31,16 +31,8 @@
               <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
                   <h1 class="h2 mr-2">Trip {{title}}</h1>
                   <button type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
-                  <div title="Add to Calendar" class="addeventatc">
-                    Add to Calendar
-                    <span class="start">{{trip.startsAt | date}}</span>
-                    <span class="end">{{trip.endsAt | date}}</span>
-                    <span class="timezone">Australia/Currie</span>
-                    <span class="title">Trip to {{trip.location}}</span>
-                    <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
-                    <span class="description">{{trip.description ? trip.description : ''}}</span>
-                    <span class="location">{{trip.location}}</span>
-                </div>
+                  <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
+
                   <div class="ml-auto p-2">
                       <button class="btn btn-danger" [routerLink]="['/add-event/', trip]">Add Event</button>
                   </div>
@@ -56,30 +48,32 @@
                               </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
-                              <input [value]="startsAt" matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Start Date">
-                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                              <mat-datepicker #picker></mat-datepicker>
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
-                              </mat-error>
+                                <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                                <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
+                                <mat-error>
+                                    <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
+                                </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
-                              <input matInput [matDatepicker]="endPicker" formControlName="endsAt" placeholder="End Date">
-                              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                              <mat-datepicker #endPicker></mat-datepicker>
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
-                              </mat-error>
+                                <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
+                                <mat-error>
+                                    <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
+                                </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
-                            <input matInput placeholder="Location" formControlName="location">
+                            <input matInput
+                                placeholder="Location" formControlName="location"
+                                matGoogleMapsAutocomplete
+                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                                (onLocationSelected)="onLocationSelected($event)">
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                             </mat-error>
                         </mat-form-field>
                         <mat-form-field class="add-full-width">
                           <mat-label>Staff</mat-label>
-                          <mat-select formControlName="users" multiple>
+                          <mat-select formControlName="users" multiple [compareWith]="compareWithFunc">
                             <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
                           </mat-select>
                         </mat-form-field>
@@ -87,6 +81,18 @@
                               <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
                           </div>
                       </form>
+
+
+                      <!-- <div title="Add to Calendar" class="addeventatc">
+                            Add to Calendar
+                            <span class="start">{{trip.startsAt | date}}</span>
+                            <span class="end">{{trip.endsAt | date}}</span>
+                            <span class="timezone">Australia/Currie</span>
+                            <span class="title">Trip to {{trip.location}}</span>
+                            <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
+                            <span class="description">{{trip.description ? trip.description : ''}}</span>
+                            <span class="location">{{trip.location}}</span>
+                        </div> -->
                       
                   </div>
 
@@ -107,3 +113,25 @@
       </main>
   </div>
 </div>
+
+
+
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Are you sure?</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+       <!-- Modal body -->
+       <div class="modal-body">
+        Do you really want to delete {{title}}? This process cannot be undone
+        </div>  
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="delete();modal.dismiss('Cross click')">Delete</button>
+    </div>
+  </ng-template>

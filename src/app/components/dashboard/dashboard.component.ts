@@ -7,6 +7,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { TravelItinerary } from '../../travel-itinerary.model';
 import { TravelItineraryService } from '../../travel-itinerary.service';
+import { UserService } from '../../user.service';
+import { User } from 'src/app/user.model';
+import { Trip } from '../../trip.model';
+import { TripService } from '../../trip.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,44 +26,93 @@ export class DashboardComponent implements OnInit {
     private af: AngularFireDatabase,
     private spinner: NgxSpinnerService,
     private filterPipe: FilterPipe,
-    private travelItineraryService: TravelItineraryService
+    private travelItineraryService: TravelItineraryService,
+    private userService: UserService,
+    private tripService: TripService
   ) { }
 
-  travelItineraries: Observable<any[]>;
+  travelItineraries: TravelItinerary[];
   isBusy: boolean;
   selectedValue: string;
   filterDateMode: string;
   availableOptions: any[];
   dateFilter: Observable<any[]>;
   travelItinerary: TravelItinerary[];
+  selectedViewMode='';
+  users: User[];
+  trip: Trip[];
+  filterTravelItinerary: TravelItinerary[];
+  listOfMonths =['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   ngOnInit() {
     this.availableOptions = ['None', 'Staff', 'Month'];
-    this.selectedValue = 'None';
-    this.filterDateMode = 'upcoming';
-    this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
-      this.spinner.hide();
-    }, 2000);
+    this.selectedViewMode = 'none';
+    this.filterDateMode = 'Current';
     // this.travelItineraries = this.af.list('/TravelItinerary').valueChanges();
-    this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
-      this.travelItinerary = actionArray.map(e => {
-        // console.log(e);
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as TravelItinerary;
-      });
-    });
-    this.dateFilter = this.travelItineraries;
+    // this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
+    //   this.travelItinerary = actionArray.map(e => {
+    //     // console.log(e);
+    //     return {
+    //       id: e.payload.doc.id,
+    //       ...e.payload.doc.data()
+    //     } as TravelItinerary;
+    //   });
+    // });
+    this.spinner.show();
+    this.getTravelItitnerary().then(() => {
+      this.getUser();
+      this.getTrip();
+      let itineraries= [];
+      this.travelItinerary.forEach(function(snapshot) {
+        if(snapshot.endsAt.toDate()>=  new Date()){
+            itineraries.push(snapshot)
+        }
+      })
+
+      this.filterTravelItinerary = itineraries
+      this.spinner.hide();
+    })
   }
 
-  addTravelItinerary(value: string): void {
-    // ...
+  getTravelItitnerary() {
+    return new Promise((resolve, reject) => {
+      this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
+        this.travelItinerary = actionArray.map(e => {
+          return {
+            id: e.payload.doc.id,
+            ...e.payload.doc.data()
+          } as TravelItinerary;
+        });
+        resolve("completed");
+      })
+    });
   }
-  deleteTravelItinerary(todo: any): void {
-    // ...
+
+  getUser() {
+    return new Promise((resolve, reject) => {
+      this.userService.getUsers().subscribe(actionArray => {
+        this.users = actionArray.map(e=>{
+          return {
+            uid:e.payload.doc.id,
+            ...e.payload.doc.data()
+          } as User
+        })
+      })
+    });
+  }
+
+  getTrip() {
+    return new Promise((resolve, reject) => {
+      this.tripService.getTrips().subscribe(actionArray => {
+        this.trip = actionArray.map(e => {
+          return {
+            id: e.payload.doc.id,
+            ...e.payload.doc.data()
+          } as Trip;
+        });
+        return resolve("completed");
+      });
+    })
   }
 
   toggleDone(todo: any): void {
@@ -70,13 +123,78 @@ export class DashboardComponent implements OnInit {
     // ...
   }
 
+  checkIfInEmail (list, item): any {
+    var result = false;
+    if(list){
+      this.trip.forEach(function(snapshot){
+        if(snapshot.travelItinerary === list.Id){
+          if(snapshot.users){
+            if(snapshot.users.map( x => x.email).includes(item)){
+              result = true
+            }
+          }
+        }
+      })
+    }
+    return result
+  }
+
+  checkIfInMonth (month,item) :any {
+    var result = false;
+  
+    const itemIndex = item.toDate().getMonth()
+    if(this.listOfMonths[itemIndex]===month){
+      result = true
+      
+    }
+    return result
+  }
+
+  onNgModelChange(value) {
+
+  }
+
+  setValue(e){
+    let itineraries= [];
+    if(e.checked){
+        this.filterDateMode = 'Current'
+        this.travelItinerary.forEach(function(snapshot) {
+          if(snapshot.endsAt.toDate()>= new Date()){
+            itineraries.push(snapshot)
+          }
+        })
+      }else{
+        this.filterDateMode = 'Past'
+        this.travelItinerary.forEach(function(snapshot) {
+          if(snapshot.endsAt.toDate()< new Date()){
+            itineraries.push(snapshot)
+          }
+        })
+      }
+      this.filterTravelItinerary = itineraries
+}
+
+
+  filterDate(item): any {
+    var result = true;
+    if(this.filterDateMode==='Up Coming') {
+      if(item.endsAt< new Date()){
+        return false
+      }
+    } else {
+      if(item.endsAt> new Date()){
+        return false
+      }
+    }
+    return result
+  }
   setDateFilter (item) {
     if (item === 'None') {
-      console.log('none');
+      this.selectedViewMode='none'
     } else if (item === 'Staff') {
-      console.log('staff');
+      this.selectedViewMode ='staff'
     } else if (item === 'Month') {
-      console.log('month');
+      this.selectedViewMode ='month'
     }
   }
 

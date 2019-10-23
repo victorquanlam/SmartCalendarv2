@@ -14,6 +14,7 @@ import { VerifyEmailComponent } from '../../components/verify-email/verify-email
 import { AddTravelItineraryComponent } from '../../components/add-travel-itinerary/add-travel-itinerary.component';
 import { AddTripComponent } from '../../components/add-trip/add-trip.component';
 import { AddEventComponent } from '../../components/add-event/add-event.component';
+import { EditEventComponent } from '../../components/edit-event/edit-event.component';
 import { EditTravelItineraryComponent } from '../../components/edit-travel-itinerary/edit-travel-itinerary.component';
 import { EditTripComponent } from '../../components/edit-trip/edit-trip.component';
 
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'add-event/:id', component: AddEventComponent, canActivate: [AuthGuard] },
   { path: 'edit-travel-itinerary/:id', component: EditTravelItineraryComponent, canActivate: [AuthGuard] },
   { path: 'edit-trip/:id', component: EditTripComponent, canActivate: [AuthGuard] },
+  { path: 'edit-event/:id', component: EditEventComponent, canActivate: [AuthGuard] },
   { path: 'time-table', component: TimeTableComponent, canActivate: [AuthGuard] },
   { path: 'report', component: ReportComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

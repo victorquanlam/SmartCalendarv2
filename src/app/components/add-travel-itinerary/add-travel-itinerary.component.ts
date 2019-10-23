@@ -22,7 +22,20 @@ export class AddTravelItineraryComponent implements OnInit {
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
       'endsAt' : [null, Validators.required]
-    });
+    }, {validator: this.dateLessThan('startsAt', 'endsAt')});
+  }
+
+  private dateLessThan(from: string, to: string) {
+    return (group: FormGroup): {[key: string]: any} => {
+     let f = group.controls[from];
+     let t = group.controls[to];
+     if (f.value > t.value) {
+       return {
+         dates: "Date from should be less than Date to"
+       };
+     }
+     return {};
+    }
   }
 
   onFormSubmit(form: NgForm) {

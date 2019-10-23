@@ -21,6 +21,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
+
 // Auth service
 import { AuthService } from './shared/services/auth.service';
 import { TimeTableComponent } from './components/time-table/time-table.component';
@@ -34,6 +35,9 @@ import { FormsModule } from '@angular/forms';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { CallbackPipe } from './shared/pipes/callback.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 import {
   MatSelectModule,
   MatInputModule,
@@ -47,6 +51,9 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatFormFieldModule,
+  MatSlideToggleModule,
+  MatDialogModule,
+  MAT_DATE_LOCALE,
   MatListModule} from '@angular/material';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { TravelItineraryService } from './travel-itinerary.service';
@@ -62,6 +69,14 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 // import { calendarComponent } from './components/time-table/calender/calendar.component';
 import { niceDateFormatPipe } from './shared/pipes/nice-date-format.pipe';
 import { ExcelService } from './excel.service';
+import { OwlDateTimeModule, OwlNativeDateTimeModule,OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
+import { EditEventComponent } from './components/edit-event/edit-event.component';
+import { DialogContentExampleDialogComponent } from './components/dialog-content-example-dialog/dialog-content-example-dialog.component';
+import { AgmCoreModule } from '@agm/core';
+
+import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
+
+import { AgmDirectionModule } from 'agm-direction';   // agm-direction
 
 @NgModule({
   declarations: [
@@ -83,9 +98,13 @@ import { ExcelService } from './excel.service';
     EditTripComponent,
     AddEventComponent,
     niceDateFormatPipe,
+    EditEventComponent,
+    DialogContentExampleDialogComponent,
     // calendarComponent
   ],
   imports: [
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -103,8 +122,19 @@ import { ExcelService } from './excel.service';
     MatCardModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatSlideToggleModule,
     MatNativeDateModule,
     MatListModule,
+    MatDialogModule,
+    MatGoogleMapsAutocompleteModule,
+    AgmDirectionModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyB9FgWueAc23WRmXqR-HhOsszPO1TQadA0',
+      libraries: ['places']
+    }),
+
+    NgbModule.forRoot(),
+    
     FilterPipeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -115,7 +145,8 @@ import { ExcelService } from './excel.service';
       useFactory: adapterFactory
     })
   ],
-  providers: [AuthService, AngularFireDatabase, TravelItineraryService,ExcelService],
+  entryComponents: [DialogContentExampleDialogComponent],
+  providers: [AuthService, AngularFireDatabase, TravelItineraryService,ExcelService,{provide: OWL_DATE_TIME_LOCALE, useValue: 'en-au'},{ provide: MAT_DATE_LOCALE, useValue: 'en-au' }],
   bootstrap: [AppComponent]
 })
 

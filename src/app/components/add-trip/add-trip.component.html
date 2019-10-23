@@ -42,28 +42,40 @@
                               </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
-                              <input matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Choose Start date">
-                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                              <mat-datepicker #picker></mat-datepicker>
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
-                              </mat-error>
+                            <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                            <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
+                            <mat-error>
+                                <span *ngIf="!boardsForm.get('startsAt').valid ">Please enter Start Date</span>
+                            </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
-                              <input matInput [matDatepicker]="endPicker" formControlName="endsAt" placeholder="Choose End date">
-                              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                              <mat-datepicker #endPicker></mat-datepicker>
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
-                              </mat-error>
+                            <input matInput placeholder="End Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                            <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
+                            <mat-error>
+                                <span *ngIf="!boardsForm.get('endsAt').valid ">Please enter End Date</span>
+                            </mat-error>
+                            
                           </mat-form-field>
-                          
+                          <mat-error class="add-full-width custom-validator-error">
+                            <span *ngIf="boardsForm.errors">Start Date should be less than End Date</span>
+                        </mat-error>
                           <mat-form-field class="add-full-width">
-                            <input matInput placeholder="Location" formControlName="location">
+                            <input matInput
+                                placeholder="Location" formControlName="location"
+                                matGoogleMapsAutocomplete
+                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                                (onLocationSelected)="onLocationSelected($event)">
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                             </mat-error>
                         </mat-form-field>
+
+                        <mat-form-field class="add-full-width">
+                                <mat-label>Staff</mat-label>
+                                <mat-select formControlName="users" multiple>
+                                  <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
 
                           <div class="button-row">
                               <button type="submit" [disabled]="!boardsForm.valid" mat-fab color="primary"><mat-icon>save</mat-icon></button>

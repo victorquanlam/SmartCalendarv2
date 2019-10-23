@@ -150,7 +150,7 @@ export class TimeTableComponent implements OnInit {
     filterItinerary.map((snapshot) => {
       this.events.push({
         id: snapshot.id,
-        title: snapshot.title,
+        title: 'Itinerary ' +snapshot.title,
         start: new Date(snapshot.startsAt.seconds * 1000),
         end: new Date(snapshot.endsAt.seconds * 1000),
         color: colors.red,
@@ -162,7 +162,7 @@ export class TimeTableComponent implements OnInit {
     filteredTrips.map((snapshot) => {
       this.events.push({
         id: snapshot.id,
-        title: snapshot.title,
+        title: 'Trip ' + snapshot.title,
         start: new Date(snapshot.startsAt.seconds * 1000),
         end: new Date(snapshot.endsAt.seconds * 1000),
         color: colors.blue,
@@ -173,7 +173,7 @@ export class TimeTableComponent implements OnInit {
     filteredEvents.map((snapshot) => {
       this.events.push({
         id: snapshot.id,
-        title: snapshot.title,
+        title: 'Event '+ snapshot.title,
         start: new Date(snapshot.startsAt.seconds * 1000),
         end: new Date(snapshot.endsAt.seconds * 1000),
         color: colors.yellow
@@ -297,7 +297,13 @@ export class TimeTableComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    alert('yes')
+    if(event.title.includes('Itinerary')){
+      this.router.navigate(['/edit-travel-itinerary/' + event.id]);
+    } else if(event.title.includes('Trip')){
+      this.router.navigate(['/edit-trip/' + event.id]);
+    } else {
+      this.router.navigate(['/edit-event/' + event.id]);
+    }
   }
 
   addEvent(): void {
