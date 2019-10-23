@@ -33,7 +33,7 @@
             <div class="inner-adjust">
                 <div class="row pt-3 pb-2 mb-3 border-bottom">
                     <div class="col-md-4 col-sm-12">
-                        <h1 class="h2">Itinerary</h1>
+                        <h1 class="h2 highlight">Itinerary</h1>
                     </div>
                     <div class="col-md-8 col-sm-12 d-flex flex-row align-items-center">
                         <mat-form-field>
@@ -58,9 +58,9 @@
                 </div>
                 <!-- Show user data when logged in -->
                 <!-- show when mode is none -->
-                <div class="row max-width" *ngIf="selectedViewMode=='none'"> 
+                <div class="row max-width " *ngIf="selectedViewMode=='none'"> 
                     <div class="list-group max-width min-height">
-                        <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngFor="let itinerary of filterTravelItinerary" class="list-group-item list-group-item-action flex-column align-items-start mb-2">
+                        <a [routerLink]="['/edit-travel-itinerary/', itinerary.id]" *ngFor="let itinerary of filterTravelItinerary" class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
                             <div class="d-flex w-100 justify-content-between" >
                                 <h6 class="mb-1">{{ itinerary.title?itinerary.title: 'Unknown Title' }}</h6>
                                 <small>{{itinerary.startsAt.toDate() | niceDateFormatPipe}}</small>

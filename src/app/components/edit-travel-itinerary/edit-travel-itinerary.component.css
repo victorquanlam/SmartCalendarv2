@@ -36,3 +36,16 @@
 .user-icon {
     margin: auto;
 }
+
+/*highlight header */
+.highlight{
+    border-left: 6px solid #1976D2;
+    padding: 10px;
+    background: whitesmoke;
+}
+
+/*highlight items */
+.highlightItems{
+    border-left: 6px solid #1E90FF;
+    padding-top: 15px;
+}
