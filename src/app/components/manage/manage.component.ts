@@ -25,7 +25,8 @@ export class ManageComponent implements OnInit {
     private ts: TravelItineraryService, private formBuilder: FormBuilder,
     public authService: AuthService) { }
 
-
+  // Runs on webpage load
+  // 1.Sets input fields to empty
   ngOnInit() {
     this.getUser();
     this.boardsForm = this.formBuilder.group({
@@ -49,17 +50,27 @@ export class ManageComponent implements OnInit {
     })
   }
 
+  // Runs when the update button is selected
+  // 1.Updates the details of the currently selected user
   updateUser(){
     console.log(this.boardsForm.value)
     this.userService.updateUser(this.uid,this.boardsForm.value)
   }
 
+  // Runs when the reset button is clicked
+  // 1.Sends a password reset email to the currently selected user.
   sendPasswordReset () {
     console.log(this.boardsForm)
     this.authService.ForgotPassword(this.boardsForm['email']);
 
   }
 
+  // Runs when the add button is clicked
+  // If a user is currently selected:
+  // 1.Clears the input fields (Deselecting the currently selected user)
+  // 2.Sets the add button's text to "Add Employee"
+  // If no user is selected
+  // 1.Takes the data from the inputs and creates a new user
   addUser() {
     if((<HTMLInputElement>document.getElementById("addBtn")).value === 'Clear Fields to Add'){
       (<HTMLInputElement>document.getElementById("addBtn")).value = 'Add Employee';
@@ -89,6 +100,8 @@ export class ManageComponent implements OnInit {
     
   }
 
+  // Runs when a user is selected from the list and delete is clicked
+  // 1.Deletes the currently selected user
   deleteUser() {
     //need to have confirmation box
     this.userService.deleteUser(this.uid)
@@ -99,6 +112,9 @@ export class ManageComponent implements OnInit {
 
   }
 
+  // Runs when a user's name is clicked in the manage list
+  // 1.Pulls the user's details from the database and inserts them into the input fields
+  // 2.Changes the add button's text to "Clear Fields to Add"
   pullUserDataClicked(id) {
     (<HTMLInputElement>document.getElementById("updateBtn")).disabled =false;
     (<HTMLInputElement>document.getElementById("deleteBtn")).disabled =false;
