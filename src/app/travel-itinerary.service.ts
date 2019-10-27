@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { TravelItinerary } from 'src/app/travel-itinerary.model';
+import { TripService } from 'src/app/trip.service';
+import { ExpenseService } from 'src/app/expense.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class TravelItineraryService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore, private ts: TripService, private expenseService: ExpenseService) { }
 
   getTravelItinerary() {
     return this.firestore.collection('TravelItinerary').snapshotChanges();
@@ -35,6 +37,8 @@ export class TravelItineraryService {
   deleteTravelItinerary(travelItineraryId: string) {
     try{
       this.firestore.doc('TravelItinerary/' + travelItineraryId).delete();
+      this.ts.deleteTrips(travelItineraryId)
+      this.expenseService.deleteExpenses(travelItineraryId)
     } catch(err){
       alert(err)
     }

@@ -25,6 +25,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 export class EditTripComponent implements OnInit {
 
   trip='';
+  travelItinerary='';
   boardsForm: FormGroup;
   title = '';
   startsAt = '';
@@ -45,7 +46,7 @@ export class EditTripComponent implements OnInit {
     this.trip = this.route.snapshot.params['id'];
     this.getTrip(this.trip);
     this.getUserList();
-    this.getEvents();
+    this.getEvents(this.trip);
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
@@ -53,10 +54,9 @@ export class EditTripComponent implements OnInit {
       'location' : [null, Validators.required],
       'users': []
     },{validator: this.dateLessThan('startsAt', 'endsAt')});
+    
     this.boardsForm.disable()
 
-
-    console.log(this.trip)
   }
 
   getUserList() {
@@ -71,15 +71,14 @@ export class EditTripComponent implements OnInit {
     })
   }
 
-  getEvents() {
-    this.eventService.getEvents().subscribe(data => {
+  getEvents(trip:string) {
+    this.eventService.getEventsBaseOnTrip(trip).subscribe(data => {
       this.eventList = data.map( e=> {
         return {
           id:e.payload.doc.id,
           ...e.payload.doc.data()
         } as Event
       })
-      console.log(this.eventList)
     })
     
   }
@@ -143,6 +142,7 @@ export class EditTripComponent implements OnInit {
     this.ts.getOneTrip(id).subscribe(data => {
       const tmp: any = data.payload.data();
       if (tmp) {
+        this.travelItinerary = tmp.travelItinerary;
         this.id = tmp.id;
         this.title = tmp.title;
         this.selectedUser = tmp.users? tmp.users:[];

@@ -19,6 +19,35 @@ body {
   background-color:rgb(238, 235, 235);
 }
 
+.background-white {
+  background-color: white ;
+}
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 
+
+/*highlight header */
+.highlight{
+  padding: 10px;
+  width: fit-content;
+  background: whitesmoke;
+}
+
+.back-header {
+  cursor: pointer;
+}
+
+.back-button-highlight {
+  background: #1976D2;
+  padding: 10px 0 10px 0;
+  color:whitesmoke;
+  
+}
+
+.back-button-highlight .mat-icon{
+  width: 15px;
+
+}
+
 .feather {
   width: 16px;
   height: 16px;

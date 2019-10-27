@@ -79,7 +79,6 @@ import { AgmDirectionModule } from 'agm-direction';
 import { ServiceWorkerModule } from '@angular/service-worker';   // agm-direction
 import { DatePipe } from '@angular/common';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -140,7 +139,7 @@ import { DatePipe } from '@angular/common';
     FilterPipeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireDatabaseModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

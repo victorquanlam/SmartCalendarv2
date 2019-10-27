@@ -29,54 +29,104 @@
         <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-4">
             <div class="inner-adjust">
                 <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
-                    <h1 class="h2 mt-auto mb-auto mr-2 highlight">Travel Itinerary  {{title}}</h1>
-                    <button type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
+                    <h1 class="h2 mt-auto mb-auto mr-2 back-header" routerLink="/dashboard"><span class="back-button-highlight"><mat-icon>arrow_back_ios</mat-icon></span><span class="highlight">Travel Itinerary {{title}}</span></h1>
+                    <button class="mr-2" type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
                     <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
-
-                    <div class="ml-auto p-2">
-                        <button class="btn btn-success" [routerLink]="['/add-trip/', travelItinerary]">Add Trip</button>
-                    </div>
-                    
                 </div>
                 <!-- Show user data when logged in -->
                 <div class="row">
                     <div class="col-md-6">
-                        <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
-                            <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Title" formControlName="title">
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
-                                <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
-                                <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
-                                </mat-error>
-                            </mat-form-field>
-                            <div class="button-row">
-                                <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
-                            </div>
-                        </form>
+                        <div class="row mat-elevation-z8 mb-3 p-3 background-white">
+                                <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="Title" formControlName="title">
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                                            <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                            <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <mat-error class="add-full-width custom-validator-error">
+                                            <span *ngIf="boardsForm.errors && boardsForm.get('endsAt').touched && boardsForm.get('startsAt').touched">Start Date should be less than End Date</span>
+                                        </mat-error>
+                                        <div class="button-row">
+                                            <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
+                                        </div>
+                                    </form>
+                        </div>
+                        
+                        <div class="row">
+                                <div class="example-container mat-elevation-z8 background-white">
+                                        <table mat-table [dataSource]="expense">
+                                          <!-- Item Column -->
+                                          <ng-container matColumnDef="item">
+                                            <th mat-header-cell *matHeaderCellDef> Expense </th>
+                                            <td mat-cell *matCellDef="let transaction"> {{transaction.title}} </td>
+                                            <td mat-footer-cell *matFooterCellDef> Total </td>
+                                          </ng-container>
+                                      
+                                          <!-- Cost Column -->
+                                          <ng-container matColumnDef="cost">
+                                            <th mat-header-cell *matHeaderCellDef> Cost </th>
+                                            <td mat-cell *matCellDef="let transaction"> {{transaction.cost | currency}} </td>
+                                            <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
+                                          </ng-container>
+
+                                          <!-- Cost Column -->
+                                          <ng-container matColumnDef="staff">
+                                                <th mat-header-cell *matHeaderCellDef> Staff </th>
+                                                <td mat-cell *matCellDef="let transaction"> {{transaction.staff.email}} </td>
+                                                <td mat-footer-cell *matFooterCellDef> </td>
+                                              </ng-container>
+
+                                          <!-- Cost Column -->
+                                          <ng-container matColumnDef="actions">
+                                                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                                <td mat-cell *matCellDef="let transaction"> 
+                                                    <button mat-button mat-mini-fab color="primary" (click)="openExpense(content2,'edit',transaction.id)"><mat-icon>link</mat-icon></button>
+                                                    <button mat-button mat-mini-fab color="secondary" (click)="openExpense(content2,'edit',transaction.id)"><mat-icon>edit</mat-icon></button>
+                                                    <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
+                                                 </td>
+                                                <td mat-footer-cell *matFooterCellDef> <button mat-button (click)="openExpense(content2,'','')" mat-mini color="primary">Add Expense</button> </td>
+                                              </ng-container>
+                                      
+                                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                          <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                                        </table>
+                                      </div>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
+                            <div class="text-center mb-2">
+                                    <button class="btn btn-success" [routerLink]="['/add-trip/', travelItinerary]">Add Trip</button>
+                                </div>
                         <div class="list-group">
-                            <a [routerLink]="['/edit-trip/', trip.id]" *ngFor="let trip of trips | filter:{travelItinerary: travelItinerary}" class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
+                            <a [routerLink]="['/edit-trip/', trip.id]" *ngFor="let trip of trips" class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ trip.title?trip.title: 'Unknown Title' }}</h5>
                                     <small>{{trip.startsAt.toDate()| niceDateFormatPipe}}</small>
                                 </div>
                                 <p class="mb-1">{{ trip.startsAt.toDate() | date }} - {{ trip.endsAt.toDate() | date }}</p>
                                 <small>{{trip.location}}</small>
+                            </a>
+                            <a *ngIf="!trips || trips.length===0" class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">No Trip</h5>
+                                </div>
                             </a>
                         </div>
                     </div>
@@ -137,3 +187,43 @@
         <button type="button" class="btn btn-danger" (click)="delete();modal.dismiss('Cross click')">Delete</button>
     </div>
   </ng-template>
+
+  <ng-template #content2 let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-route-map">Expense</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <!-- Modal body -->
+           <div class="modal-body">
+                <form [formGroup]="expenseForm" (ngSubmit)="addExpense(expenseForm.value)">
+                        <mat-form-field class="add-full-width">
+                            <input matInput placeholder="Title" formControlName="title">
+                            <mat-error>
+                                <span *ngIf="!expenseForm.get('title').valid && expenseForm.get('title').touched">Please enter Title</span>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="add-full-width">
+                                <input type="number" matInput placeholder="Cost" formControlName="cost">
+                                <mat-error>
+                                    <span *ngIf="!expenseForm.get('cost').valid && expenseForm.get('cost').touched">Please enter Cost</span>
+                                </mat-error>
+                            </mat-form-field>
+
+                        <mat-form-field class="add-full-width">
+                            <mat-label>Staff</mat-label>
+                            <mat-select formControlName="staff" [compareWith]="compareWithFunc">
+                                <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div class="button-row">
+                                <button type="submit" class="btn btn-success" >Add</button>
+                        </div>
+                    </form>
+            </div>  
+        </div>
+      </ng-template>

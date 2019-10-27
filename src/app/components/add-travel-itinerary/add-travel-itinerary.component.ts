@@ -29,6 +29,15 @@ export class AddTravelItineraryComponent implements OnInit {
     return (group: FormGroup): {[key: string]: any} => {
      let f = group.controls[from];
      let t = group.controls[to];
+
+     let today = new Date();
+
+     if(f.value < today || t.value < today) {
+      return {
+        dates: "Date should not be less than today"
+      };
+     }
+
      if (f.value > t.value) {
        return {
          dates: "Date from should be less than Date to"

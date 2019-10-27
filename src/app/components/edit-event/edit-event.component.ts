@@ -18,6 +18,7 @@ import PlaceResult = google.maps.places.PlaceResult;
 export class EditEventComponent implements OnInit {
 
   event='';
+  trip='';
   boardsForm: FormGroup;
   title = '';
   startsAt = '';
@@ -70,6 +71,7 @@ export class EditEventComponent implements OnInit {
       if (tmp) {
         this.id = tmp.id;
         this.title = tmp.title;
+        this.trip = tmp.trip;
         this.selectedUser = tmp.users;
         this.boardsForm.setValue({
           title: tmp.title,

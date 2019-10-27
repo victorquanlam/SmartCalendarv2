@@ -19,11 +19,13 @@ export class AddTripComponent implements OnInit {
   endsAt = '';
   userList=[];
   location ='';
+  travelItinerary='';
 
   constructor(private router: Router ,private userService: UserService, private route: ActivatedRoute , private travelItineraryService: TravelItineraryService, private ts: TripService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.getUserList()
+    this.travelItinerary = this.route.snapshot.params['id'];
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
@@ -39,6 +41,7 @@ export class AddTripComponent implements OnInit {
     this.travelItineraryService.getOneTravelItinerary(this.route.snapshot.params['id']).subscribe(data => {
       const tmp: any = data.payload.data();
       if (tmp) {
+        
         this.boardsForm.patchValue({
           startsAt: tmp.startsAt.toDate(),
           endsAt: tmp.endsAt.toDate(),
@@ -64,6 +67,15 @@ export class AddTripComponent implements OnInit {
     return (group: FormGroup): {[key: string]: any} => {
      let f = group.controls[from];
      let t = group.controls[to];
+
+     let today = new Date();
+
+     if(f.value < today || t.value < today) {
+      return {
+        dates: "Date should not be less than today"
+      };
+     }
+
      if (f.value > t.value) {
        return {
          dates: "Date from should be less than Date to"

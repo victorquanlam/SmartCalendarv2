@@ -14,6 +14,11 @@ export class EventService {
     return this.firestore.collection('Events').snapshotChanges();
   }
 
+  getEventsBaseOnTrip(trip:string) {
+    return this.firestore.collection('Events', ref => ref.where('trip','==',trip)).snapshotChanges();
+    
+  }
+
   getOneEvent(id) {
     return this.firestore.collection('Events').doc(id).snapshotChanges();
   }
@@ -32,6 +37,19 @@ export class EventService {
       this.firestore.collection('Events').doc(id).set(data);
     } catch(err) {
       alert(err)
+    }
+  }
+
+  async deleteEvents(trip: string){
+    try{
+      await this.firestore.collection('Events', ref => ref.where('trip','==',trip)).snapshotChanges().subscribe(
+       data => data.forEach(doc => {
+         console.log(doc)
+         this.deleteEvent(doc.payload.doc.id)
+        })
+      )
+    } catch(err) {
+       alert(err)
     }
   }
 

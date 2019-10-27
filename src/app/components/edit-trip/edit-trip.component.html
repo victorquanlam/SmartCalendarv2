@@ -29,13 +29,9 @@
       <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-4">
           <div class="inner-adjust">
               <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
-                  <h1 class="h2 mr-2 highlight">Trip {{title}}</h1>
-                  <button type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
+                  <h1 class="h2 mr-2 back-header" [routerLink]="['/edit-travel-itinerary/', travelItinerary]"><span class="back-button-highlight"><mat-icon>arrow_back_ios</mat-icon></span><span class="highlight">Trip {{title}}</span></h1>
+                  <button class="mr-2" type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
                   <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
-
-                  <div class="ml-auto p-2">
-                      <button class="btn btn-success" [routerLink]="['/add-event/', trip]">Add Event</button>
-                  </div>
               </div>
               <!-- Show user data when logged in -->
               <div class="row">
@@ -50,27 +46,21 @@
                           <mat-form-field class="add-full-width">
                                 <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
                                 <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
-                                </mat-error>
                           </mat-form-field>
                           <mat-form-field class="add-full-width">
                                 <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
                                 <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
-                                </mat-error>
                           </mat-form-field>
                           
                           <mat-error class="add-full-width custom-validator-error">
-                            <span *ngIf="boardsForm.errors">Start Date should be less than End Date</span>
+                            <span *ngIf="boardsForm.errors && boardsForm.get('endsAt').touched && boardsForm.get('startsAt').touched">Invalid Start Date or End Date</span>
                         </mat-error>
 
                             <mat-form-field class="add-full-width">
                             <input matInput
                                 placeholder="Location" formControlName="location"
                                 matGoogleMapsAutocomplete
-                                (onAutocompleteSelected)="onAutocompleteSelectedHotel($event)"
+                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
                                 (onLocationSelected)="onLocationSelected($event)">
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
@@ -102,8 +92,11 @@
                   </div>
 
                   <div class="col-md-6">
+                        <div class="text-center mb-2">
+                                <button class="btn btn-success" [routerLink]="['/add-event/', trip]">Add Event</button>
+                            </div>
                       <div class="list-group">
-                          <a [routerLink]="['/edit-event/', event.id]" *ngFor="let event of eventList | filter:{trip: trip} " class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
+                          <a [routerLink]="['/edit-event/', event.id]" *ngFor="let event of eventList" class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
                               <div class="d-flex w-100 justify-content-between">
                                   <h5 class="mb-1">{{ event.title?event.title: 'Unknown Title' }}</h5>
                                   <small>{{event.startsAt.toDate() | niceDateFormatPipe}}</small>
@@ -111,6 +104,11 @@
                               <p class="mb-1">{{ event.startsAt.toDate() | date }} - {{ event.endsAt.toDate() | date }}</p>
                               <small>{{event.location}}</small>
                           </a>
+                          <a *ngIf="!eventList || eventList.length===0" class="list-group-item list-group-item-action flex-column align-items-start mb-2 highlightItems">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">No Event</h5>
+                            </div>
+                        </a>
                       </div>
                   </div>
               </div>

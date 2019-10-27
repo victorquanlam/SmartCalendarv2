@@ -24,11 +24,13 @@ export class AddEventComponent implements OnInit {
   flightDetail='';
   hotel='';
   userList=[];
+  trip='';
 
   constructor(private router: Router ,private userService: UserService, private tripService:TripService,private route: ActivatedRoute , private ts: EventService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.getUserList();
+    this.trip = this.route.snapshot.params['id'];
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],

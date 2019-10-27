@@ -39,7 +39,6 @@
 
 /*highlight header */
 .highlight{
-    border-left: 6px solid #1976D2;
     padding: 10px;
     background: whitesmoke;
 }
@@ -49,3 +48,26 @@
     border-left: 6px solid #1E90FF;
     padding-top: 15px;
 }
+
+.example-container {
+    height: 30vh;
+    overflow: auto;
+    width: 100%;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  tr.mat-footer-row {
+    font-weight: bold;
+  }
+  
+  .mat-table-sticky {
+    border-top: 1px solid #e0e0e0;
+  }
+
+
+  .cdk-global-overlay-wrapper, .cdk-overlay-container {
+    z-index: 99999 !important;
+ }

@@ -3,13 +3,18 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TravelItineraryService } from '../../travel-itinerary.service';
 import { TripService } from '../../trip.service';
 import { EventService } from '../../event.service';
+import { UserService } from '../../user.service';
+
 import { Observable } from 'rxjs';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormsModule } from '@angular/forms';
 import { Trip } from 'src/app/trip.model';
 import { Event } from 'src/app/event.model';
+import { Expense } from 'src/app/expense.model';
+import { ExpenseService } from 'src/app/expense.service';
 import { TravelItinerary } from 'src/app/travel-itinerary.model';
 import { AuthService } from '../../shared/services/auth.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @Pipe({ name: 'TripFilter' })
@@ -22,18 +27,21 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 
 
+
 export class EditTravelItineraryComponent implements OnInit {
   public lat = 24.799448;
   public lng = 120.979021;
 
 
   boardsForm: FormGroup;
+  expenseForm: FormGroup;
   title = '';
   startsAt = '';
   endsAt = '';
   id = '';
   isEditing=false;
   trips: Trip[];
+  userList=[];
   events: Event[];
   travelItinerary= '';
   currentUser=this.authService.userData;
@@ -41,30 +49,77 @@ export class EditTravelItineraryComponent implements OnInit {
 
   listOfLocations=[];
 
+  item: string;
+  cost: number;
+  displayedColumns = ['item', 'cost','staff','actions'];
+  expense: Expense[];
+
   public origin: any;
-public destination: any;
+  public destination: any;
 
   constructor(private router: Router, private route: ActivatedRoute,
   private ts: TravelItineraryService, private formBuilder: FormBuilder,
   private tripService: TripService, public authService: AuthService,
   private modalService: NgbModal,
-  private eventService: EventService) { }
+  private eventService: EventService,
+  private expenseService: ExpenseService,
+  private userService: UserService) { }
 
   ngOnInit() {
     this.travelItinerary = this.route.snapshot.params['id']
     this.getTravelItinerary(this.travelItinerary);
+    this.getExpenses(this.travelItinerary);
     this.getTrips(this.travelItinerary).then(() => {
       this.getEvents();
       // this.setValueForLocationList();
     });
+
+    this.getUserList();
     
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
       'endsAt' : [null, Validators.required]
-    });
+    },{validator: this.dateLessThan('startsAt', 'endsAt')});
     
+    this.boardsForm.disable()
+
   }
+
+  private dateLessThan(from: string, to: string) {
+    return (group: FormGroup): {[key: string]: any} => {
+     let f = group.controls[from];
+     let t = group.controls[to];
+     if (f.value > t.value) {
+       return {
+         dates: "Date from should be less than Date to"
+       };
+     }
+     return {};
+    }
+  }
+
+  getUserList() {
+    this.userService.getUsers().subscribe(data => {
+      this.userList = data.map(e=>{
+        return {
+          id:e.payload.doc.id,
+          ...e.payload.doc.data()
+        }
+      })
+      
+    })
+  }
+
+  getTotalCost() {
+    let totalCost = 0;
+    if(this.expense && this.expense.length>0){
+      totalCost = this.expense.map(t => t.cost).reduce((acc, value) => acc + value, 0);
+    }
+    return totalCost;
+  }
+
+ 
 
   getTravelItinerary(id) {
     this.ts.getOneTravelItinerary(id).subscribe(data => {
@@ -81,9 +136,20 @@ public destination: any;
     });
   }
 
-  getTrips(id) {
+  getExpenses(id) {
+    this.expenseService.getExpense(id).subscribe(actionArray => {
+      this.expense = actionArray.map( e => {
+        return {
+          id: e.payload.doc.id,
+          ...e.payload.doc.data()
+        } as Expense
+      })
+    })
+  }
+
+  getTrips(id:string) {
     return new Promise((resolve, reject) => {
-    this.tripService.getTrips().subscribe(actionArray => {
+    this.tripService.getTripsBaseOnItinerary(id).subscribe(actionArray => {
       this.trips = actionArray.map(e=>{
         return {
           id:e.payload.doc.id,
@@ -111,16 +177,6 @@ public destination: any;
 
   delete() {
     try{
-      // this.trips.forEach(function(snapshot){
-      //   if(snapshot.travelItinerary===this.route.snapshot.params['id']){
-      //     this.events.forEach(function(childSnapshot){
-      //       if(childSnapshot.trip === snapshot.id){
-      //         this.eventService.delete(childSnapshot.trip)
-      //       }
-      //     })
-      //     this.tripService.delete(snapshot.id)
-      //   }
-      // })
       this.ts.deleteTravelItinerary(this.route.snapshot.params['id']);
     } finally{
       this.router.navigate(['/dashboard/']);
@@ -135,6 +191,31 @@ public destination: any;
     });
   }
 
+  openExpense(content2,mode,expenseId){
+    this.expenseForm = this.formBuilder.group({
+      'title' : [null, Validators.required],
+      'cost' : [null, Validators.required],
+      'staff' : [null, Validators.required]
+    });
+    if(mode==='edit'){
+      this.expenseService.getOneExpense(expenseId).subscribe(data => {
+        const tmp: any = data.payload.data();
+        if(tmp) {
+          this.expenseForm.setValue({
+            title: tmp.title,
+            cost: tmp.cost,
+           staff: tmp.staff
+          });
+        }
+      })
+    }
+    this.modalService.open(content2, {ariaLabelledBy: 'modal-basic-title'}).result.then((result)=>{
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    })
+  }
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -145,9 +226,21 @@ public destination: any;
     }
   }
 
+  compareWithFunc(a, b) {
+    return a.email === b.email;
+  }
+
   enableEdit() {
     this.isEditing=true;
     this.boardsForm.enable()
+  }
+
+  addExpense (form: NgForm) {
+    const expense = {
+      ...form,
+      travelItinerary: this.route.snapshot.params['id']
+    }
+    this.expenseService.createExpense(expense)
   }
 
   onFormSubmit(form: NgForm) {

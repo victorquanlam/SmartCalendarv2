@@ -1,5 +1,31 @@
 {
   "index": "/index.html",
+  "dataGroups": [{
+    "name": "api-freshness",
+    "urls": [
+      "/time-table",
+      "/report",
+      "/manage",
+      "/dashboard",
+      "/"
+    ],
+    "cacheConfig": {
+      "maxSize": 100,
+      "maxAge": "1h",
+      "timeout": "2s",
+      "strategy": "freshness"
+    }
+  }, {
+    "name": "api-performance",
+    "urls": [
+    ],
+    "cacheConfig": {
+      "maxSize": 100,
+      "maxAge": "1d",
+      "strategy": "performance"
+    }
+  }],
+
   "assetGroups": [
     {
       "name": "app",
@@ -8,7 +34,7 @@
         "files": [
           "/assets/favicon.ico",
           "/index.html",
-          "/styles.css",
+          "/*.css",
           "/*.js"
         ]
       }
