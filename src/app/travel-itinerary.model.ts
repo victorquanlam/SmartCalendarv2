@@ -3,4 +3,5 @@ export class TravelItinerary {
     title: string;
     startsAt: any;
     endsAt: any;
+    users: any[];
   }

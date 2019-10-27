@@ -46,6 +46,7 @@ export class EditTravelItineraryComponent implements OnInit {
   travelItinerary= '';
   currentUser=this.authService.userData;
   closeResult: string;
+  selectedUser=[];
 
   listOfLocations=[];
 
@@ -79,7 +80,8 @@ export class EditTravelItineraryComponent implements OnInit {
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
-      'endsAt' : [null, Validators.required]
+      'endsAt' : [null, Validators.required],
+      'users': []
     },{validator: this.dateLessThan('startsAt', 'endsAt')});
     
     this.boardsForm.disable()
@@ -127,10 +129,12 @@ export class EditTravelItineraryComponent implements OnInit {
       if (tmp) {
         this.id = tmp.id;
         this.title = tmp.title;
+        this.selectedUser = tmp.users? tmp.users:[];
         this.boardsForm.setValue({
           title: tmp.title,
           startsAt: tmp.startsAt.toDate(),
-         endsAt: tmp.endsAt.toDate()
+          endsAt: tmp.endsAt.toDate(),
+          users:this.selectedUser
         });
       }
     });
