@@ -61,6 +61,12 @@
                                         <mat-error class="add-full-width custom-validator-error">
                                             <span *ngIf="boardsForm.errors && boardsForm.get('endsAt').touched && boardsForm.get('startsAt').touched">Start Date should be less than End Date</span>
                                         </mat-error>
+                                        <mat-form-field class="add-full-width">
+                                            <mat-label>Staff</mat-label>
+                                            <mat-select formControlName="users" multiple [compareWith]="compareWithFunc">
+                                                <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
                                         <div class="button-row">
                                             <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
                                         </div>

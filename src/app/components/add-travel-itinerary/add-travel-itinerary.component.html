@@ -52,6 +52,12 @@
                             <mat-error class="add-full-width custom-validator-error">
                                 <span *ngIf="boardsForm.errors && boardsForm.get('endsAt').touched && boardsForm.get('startsAt').touched">Invalid Start Date or End Date</span>
                             </mat-error>
+                            <mat-form-field class="add-full-width">
+                                <mat-label>Staff</mat-label>
+                                <mat-select formControlName="users" multiple>
+                                    <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
                             <div class="button-row">
                                 <button type="submit" [disabled]="!boardsForm.valid" mat-fab color="primary"><mat-icon>save</mat-icon></button>
                             </div>

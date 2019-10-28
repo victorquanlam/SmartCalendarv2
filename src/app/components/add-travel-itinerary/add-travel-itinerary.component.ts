@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TravelItineraryService } from '../../travel-itinerary.service';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-add-travel-itinerary',
@@ -10,18 +11,22 @@ import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Valida
 })
 export class AddTravelItineraryComponent implements OnInit {
 
-  constructor(private router: Router, private ts: TravelItineraryService, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private userService: UserService, private ts: TravelItineraryService, private formBuilder: FormBuilder) { }
 
   boardsForm: FormGroup;
   title = '';
   startsAt = '';
   endsAt = '';
+  users=[];
+  userList=[];
 
   ngOnInit() {
+    this.getUserList();
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'startsAt' : [null, Validators.required],
-      'endsAt' : [null, Validators.required]
+      'endsAt' : [null, Validators.required],
+      'users' :[null]
     }, {validator: this.dateLessThan('startsAt', 'endsAt')});
   }
 
@@ -45,6 +50,18 @@ export class AddTravelItineraryComponent implements OnInit {
      }
      return {};
     }
+  }
+
+  getUserList() {
+    this.userService.getUsers().subscribe(data => {
+      this.userList = data.map(e=>{
+        return {
+          id:e.payload.doc.id,
+          ...e.payload.doc.data()
+        }
+      })
+      
+    })
   }
 
   onFormSubmit(form: NgForm) {
