@@ -37,7 +37,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row mat-elevation-z8 mb-3 p-3 background-white">
-                                <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
+                                <form class="max-width" [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
                                         <mat-form-field class="add-full-width">
                                             <input matInput placeholder="Title" formControlName="title">
                                             <mat-error>
@@ -101,7 +101,7 @@
                                           <ng-container matColumnDef="actions">
                                                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                                                 <td mat-cell *matCellDef="let transaction"> 
-                                                    <button mat-button mat-mini-fab color="primary" (click)="openExpense(content2,'link',transaction.id)"><mat-icon>link</mat-icon></button>
+                                                    <button mat-button mat-mini-fab color="primary" (click)="openExpense(content2,'link',transaction.downloadURL)"><mat-icon>link</mat-icon></button>
                                                     <button mat-button mat-mini-fab color="secondary" (click)="openExpense(content3,'edit',transaction.id)"><mat-icon>edit</mat-icon></button>
                                                     <button mat-button mat-mini-fab color="red" (click)="openExpense(content1,'delete',transaction.id)"><mat-icon>delete</mat-icon></button>
                                                  </td>
@@ -197,14 +197,14 @@
   <ng-template #content2 let-modal>
         <div class="modal-header">
           <h4 class="modal-title" id="modal-route-map">Expense</h4>
-          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click');cancelUploadingAttachment()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
            <!-- Modal body -->
            <div class="modal-body">
-                <form [formGroup]="expenseForm" (ngSubmit)="addExpense(expenseForm.value)">
+                <form [formGroup]="expenseForm" (ngSubmit)="addExpense(expenseForm.value);modal.dismiss('Cross click')">
                         <mat-form-field class="add-full-width">
                             <input matInput placeholder="Title" formControlName="title">
                             <mat-error>
@@ -226,14 +226,20 @@
                             </mat-select>
                         </mat-form-field>
 
+                        <mat-form-field class="add-full-width pb-2" *ngIf="uploadURL">
+                                <input matInput placeholder="Attachment URL" formControlName="downloadURL">
+                            </mat-form-field>
+                        
+                        <button class="btn btn-primary" type="button" (click)="fileInput.click()">
+                            <mat-icon>library_add</mat-icon>
+                            <span>Attachment</span>
+                            <input #fileInput type="file" (change)="uploadToStorage($event,'')" accept=".png,.jpg"  style="display:none;" />
+                        </button>
 
-                        <mat-form-field class="add-full-width">
-                                <input type="file" (change)="uploadToStorage($event)" accept=".png,.jpg" />
-                        </mat-form-field>
                         
 
                         <div class="button-row">
-                                <button type="submit" class="btn btn-success" >Add</button>
+                                <button type="submit" [disabled]="!expenseForm.valid || !uploadURL" class="btn btn-success" >Add</button>
                         </div>
                     </form>
             </div>  
@@ -271,6 +277,20 @@
                                     <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
+
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="Attachment Id" formControlName="attachmentId" readOnly> 
+                            </mat-form-field>
+
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="Download URL" formControlName="downloadURL" readOnly>
+                            </mat-form-field>
+
+                            <button class="btn btn-primary" type="button" (click)="fileInput.click()">
+                                    <mat-icon>library_add</mat-icon>
+                                    <span>Attachment</span>
+                                    <input #fileInput type="file" (change)="uploadToStorage($event,expenseForm.get('attachmentId'))" accept=".png,.jpg"  style="display:none;" />
+                                </button>
     
                             <div class="button-row">
                                     <button type="submit" class="btn btn-success" >Save</button>

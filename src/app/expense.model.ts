@@ -5,4 +5,6 @@ export class Expense {
     staff: string;
     title: string;
     cost: number;
+    attachmentId:string;
+    downloadURL:string;
   }

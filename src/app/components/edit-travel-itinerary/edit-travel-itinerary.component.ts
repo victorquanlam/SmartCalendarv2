@@ -41,6 +41,7 @@ export class EditTravelItineraryComponent implements OnInit {
   startsAt = '';
   endsAt = '';
   id = '';
+  selectedUser='';
   isEditing=false;
   trips: Trip[];
   userList=[];
@@ -209,31 +210,51 @@ export class EditTravelItineraryComponent implements OnInit {
     });
   }
 
-  openExpense(content2,mode,expenseId){
+  openExpense(content,mode,expenseId){
     this.expenseForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'cost' : [null, Validators.required],
-      'staff' : [null, Validators.required]
+      'staff' : [null, Validators.required],
+      'attachmentId' : [null],
+      'downloadURL' : [null]
     });
+    this.selectedExpense = expenseId
     if(mode==='edit' || mode==='add'){
-      this.expenseService.getOneExpense(expenseId).subscribe(data => {
-        const tmp: any = data.payload.data();
-        if(tmp) {
-          this.expenseForm.setValue({
-            title: tmp.title,
-            cost: tmp.cost,
-           staff: tmp.staff
-          });
-        }
-      })
-
-      this.modalService.open(content2, {ariaLabelledBy: 'modal-basic-title'}).result.then((result)=>{
+      if(mode==='edit'){
+        // this.expenseForm['attachmentId'].disable();
+        // this.expenseForm['downloadURL'].disable();
+        this.expenseService.getOneExpense(expenseId).subscribe(data => {
+          const tmp: any = data.payload.data();
+          if(tmp) {
+            this.expenseForm.setValue({
+              title: tmp.title,
+              cost: tmp.cost,
+              staff: tmp.staff,
+              attachmentId:tmp.attachmentId||'',
+              downloadURL: tmp.downloadURL||''
+            });
+          }
+        })
+  
+      } 
+      
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result)=>{
         this.closeResult = `Closed with: ${result}`;
       }, (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       })
-    } else if (mode==='delete' || mode==='link'){
-      this.selectedExpense = expenseId
+    } else if ( mode==='link'){
+      //open download link
+      window.open(expenseId)
+    } else if (mode==='delete') {
+      this.expenseService.getOneExpense(expenseId).subscribe(data => {
+        const tmp: any = data.payload.data();
+        if(tmp) {
+          console.log(tmp.attachmentId)
+          this.afStorage.ref(tmp.attachmentId).delete()
+          this.expenseService.deleteExpense(tmp.id)
+        }
+      })
     }
     
   }
@@ -283,15 +304,42 @@ export class EditTravelItineraryComponent implements OnInit {
   }
 
 
-  async uploadToStorage(event) {
-    const id =this.selectedExpense;
-    this.ref = this.afStorage.ref(id);
-    this.task = await this.ref.put(event.target.files[0]).then((snapshot) => {
-      console.log(snapshot.downloadURL)
-      this.downloadURL = snapshot.downloadURL
-    })
+  uploadURL='';
+  async uploadToStorage(event,fileId) {
+    let randomId;
+    if(fileId==='') {
+     randomId = Math.random().toString(36).substring(2);
+    } else {
+      randomId = fileId
+      this.ref = this.afStorage.ref(randomId);
+      this.ref.delete()
+    }
+  // create a reference to the storage bucket location
+ 
 
+  this.ref = this.afStorage.ref(randomId);
+  // the put method creates an AngularFireUploadTask
+  // and kicks off the upload
+  this.task = await this.ref.put(event.target.files[0]).then((snapshot) => {
+    console.log(snapshot.downloadURL)
+  })
+  const downloadURL = await this.ref.getDownloadURL()
+
+      downloadURL.subscribe(url=>{
+        if(url){
+            this.uploadURL = url;
+            this.expenseForm.patchValue({
+              attachmentId: randomId,
+              downloadURL: url
+            })
+        }
+    })
   }
+
+  cancelUploadingAttachment(){
+    this.ref.delete()
+  }
+
 
    openMap (event):void {
     var geocoder = new google.maps.Geocoder();

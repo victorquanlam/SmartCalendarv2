@@ -36,46 +36,49 @@
               <!-- Show user data when logged in -->
               <div class="row">
                   <div class="col-md-6">
-                      <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
-                          <mat-form-field class="add-full-width">
-                              <input matInput placeholder="Title" formControlName="title">
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
-                              </mat-error>
-                          </mat-form-field>
-                          <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
-                                <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
-                          </mat-form-field>
-                          <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
-                                <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
-                          </mat-form-field>
-                          
-                          <mat-error class="add-full-width custom-validator-error">
-                            <span *ngIf="boardsForm.errors && boardsForm.get('endsAt').touched && boardsForm.get('startsAt').touched">Invalid Start Date or End Date</span>
-                        </mat-error>
-
-                            <mat-form-field class="add-full-width">
-                            <input matInput
-                                placeholder="Location" formControlName="location"
-                                matGoogleMapsAutocomplete
-                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                                (onLocationSelected)="onLocationSelected($event)">
-                            <mat-error>
-                                <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="add-full-width">
-                          <mat-label>Staff</mat-label>
-                          <mat-select formControlName="users" multiple [compareWith]="compareWithFunc">
-                            <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                          <div class="button-row">
-                              <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
-                          </div>
-                      </form>
+                      <div class="row mat-elevation-z8 mb-3 p-3 background-white">
+                            <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
+                                    <mat-form-field class="add-full-width">
+                                        <input matInput placeholder="Title" formControlName="title">
+                                        <mat-error>
+                                            <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="add-full-width">
+                                          <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                                          <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
+                                    </mat-form-field>
+                                    <mat-form-field class="add-full-width">
+                                          <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                          <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
+                                    </mat-form-field>
+                                    
+                                    <mat-error class="add-full-width custom-validator-error">
+                                      <span *ngIf="boardsForm.errors && boardsForm.get('endsAt').touched && boardsForm.get('startsAt').touched">Invalid Start Date or End Date</span>
+                                  </mat-error>
+          
+                                      <mat-form-field class="add-full-width">
+                                      <input matInput
+                                          placeholder="Location" formControlName="location"
+                                          matGoogleMapsAutocomplete
+                                          (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                                          (onLocationSelected)="onLocationSelected($event)">
+                                      <mat-error>
+                                          <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
+                                      </mat-error>
+                                  </mat-form-field>
+                                  <mat-form-field class="add-full-width">
+                                    <mat-label>Staff</mat-label>
+                                    <mat-select formControlName="users" multiple [compareWith]="compareWithFunc">
+                                      <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                    <div class="button-row">
+                                        <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
+                                    </div>
+                                </form>
+                      </div>
+                      
 
 
                       <!-- <div title="Add to Calendar" class="addeventatc">

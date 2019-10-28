@@ -18,7 +18,7 @@ import { VerifyEmailComponent } from './components/verify-email/verify-email.com
 // Firebase services + enviorment module
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorage  } from '@angular/fire/storage';
+import { AngularFireStorageModule   } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
@@ -140,7 +140,7 @@ import { DatePipe } from '@angular/common';
     FilterPipeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFireStorage,
+    AngularFireStorageModule,
     AngularFirestoreModule.enablePersistence(),
     AngularFireDatabaseModule,
     CalendarModule.forRoot({
