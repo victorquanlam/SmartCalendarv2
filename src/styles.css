@@ -328,7 +328,7 @@ input:-moz-placeholder {
 .link-active , .dasboard-text-active {
   color: white!important;
 }
-.dasboard-text-active { 
+.dasboard-text-active,.dasboard-text { 
   font-size: 16px!important;
 }
 

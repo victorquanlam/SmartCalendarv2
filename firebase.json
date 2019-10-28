@@ -7,7 +7,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "dist/smart-calendar",
+    "public": "./dist/smart-calendar",
     "ignore": [
       "firebase.json",
       "**/.*",
