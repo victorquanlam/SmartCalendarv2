@@ -95,11 +95,11 @@
                                           <ng-container matColumnDef="actions">
                                                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                                                 <td mat-cell *matCellDef="let transaction"> 
-                                                    <button mat-button mat-mini-fab color="primary" (click)="openExpense(content2,'edit',transaction.id)"><mat-icon>link</mat-icon></button>
-                                                    <button mat-button mat-mini-fab color="secondary" (click)="openExpense(content2,'edit',transaction.id)"><mat-icon>edit</mat-icon></button>
-                                                    <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
+                                                    <button mat-button mat-mini-fab color="primary" (click)="openExpense(content2,'link',transaction.id)"><mat-icon>link</mat-icon></button>
+                                                    <button mat-button mat-mini-fab color="secondary" (click)="openExpense(content3,'edit',transaction.id)"><mat-icon>edit</mat-icon></button>
+                                                    <button mat-button mat-mini-fab color="red" (click)="openExpense(content1,'delete',transaction.id)"><mat-icon>delete</mat-icon></button>
                                                  </td>
-                                                <td mat-footer-cell *matFooterCellDef> <button mat-button (click)="openExpense(content2,'','')" mat-mini color="primary">Add Expense</button> </td>
+                                                <td mat-footer-cell *matFooterCellDef> <button mat-button (click)="openExpense(content2,'add','')" mat-mini color="primary">Add Expense</button> </td>
                                               </ng-container>
                                       
                                           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -180,11 +180,11 @@
     <div class="modal-body">
        <!-- Modal body -->
        <div class="modal-body">
-        Do you really want to delete {{title}}? This process cannot be undone
+        Do you really want to delete this expense? This process cannot be undone
         </div>  
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="delete();modal.dismiss('Cross click')">Delete</button>
+        <button type="button" class="btn btn-danger" (click)="deleteExpense();modal.dismiss('Cross click')">Delete</button>
     </div>
   </ng-template>
 
@@ -220,6 +220,12 @@
                             </mat-select>
                         </mat-form-field>
 
+
+                        <mat-form-field class="add-full-width">
+                                <input type="file" (change)="uploadToStorage($event)" accept=".png,.jpg" />
+                        </mat-form-field>
+                        
+
                         <div class="button-row">
                                 <button type="submit" class="btn btn-success" >Add</button>
                         </div>
@@ -227,3 +233,43 @@
             </div>  
         </div>
       </ng-template>
+
+      <ng-template #content3 let-modal>
+            <div class="modal-header">
+              <h4 class="modal-title" id="modal-route-map">Expense</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <!-- Modal body -->
+               <div class="modal-body">
+                    <form [formGroup]="expenseForm" (ngSubmit)="editExpense(expenseForm.value)">
+                            <mat-form-field class="add-full-width">
+                                <input matInput placeholder="Title" formControlName="title">
+                                <mat-error>
+                                    <span *ngIf="!expenseForm.get('title').valid && expenseForm.get('title').touched">Please enter Title</span>
+                                </mat-error>
+                            </mat-form-field>
+    
+                            <mat-form-field class="add-full-width">
+                                    <input type="number" matInput placeholder="Cost" formControlName="cost">
+                                    <mat-error>
+                                        <span *ngIf="!expenseForm.get('cost').valid && expenseForm.get('cost').touched">Please enter Cost</span>
+                                    </mat-error>
+                                </mat-form-field>
+    
+                            <mat-form-field class="add-full-width">
+                                <mat-label>Staff</mat-label>
+                                <mat-select formControlName="staff" [compareWith]="compareWithFunc">
+                                    <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+    
+                            <div class="button-row">
+                                    <button type="submit" class="btn btn-success" >Save</button>
+                            </div>
+                        </form>
+                </div>  
+            </div>
+          </ng-template>

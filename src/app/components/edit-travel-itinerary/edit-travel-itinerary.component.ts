@@ -1,5 +1,7 @@
 import { Component, OnInit , Pipe, PipeTransform} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+
 import { TravelItineraryService } from '../../travel-itinerary.service';
 import { TripService } from '../../trip.service';
 import { EventService } from '../../event.service';
@@ -46,6 +48,14 @@ export class EditTravelItineraryComponent implements OnInit {
   travelItinerary= '';
   currentUser=this.authService.userData;
   closeResult: string;
+  selectedExpense ='';
+
+  //firebase storage
+  ref: AngularFireStorageReference;
+  task: AngularFireUploadTask;
+
+  //download link for storage upload
+  downloadURL: string;
 
   listOfLocations=[];
 
@@ -63,7 +73,8 @@ export class EditTravelItineraryComponent implements OnInit {
   private modalService: NgbModal,
   private eventService: EventService,
   private expenseService: ExpenseService,
-  private userService: UserService) { }
+  private userService: UserService,
+  private afStorage: AngularFireStorage) { }
 
   ngOnInit() {
     this.travelItinerary = this.route.snapshot.params['id']
@@ -183,6 +194,10 @@ export class EditTravelItineraryComponent implements OnInit {
     }
   }
 
+  deleteExpense(id) {
+    this.expenseService.deleteExpense(id)
+  }
+
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -197,7 +212,7 @@ export class EditTravelItineraryComponent implements OnInit {
       'cost' : [null, Validators.required],
       'staff' : [null, Validators.required]
     });
-    if(mode==='edit'){
+    if(mode==='edit' || mode==='add'){
       this.expenseService.getOneExpense(expenseId).subscribe(data => {
         const tmp: any = data.payload.data();
         if(tmp) {
@@ -208,12 +223,16 @@ export class EditTravelItineraryComponent implements OnInit {
           });
         }
       })
+
+      this.modalService.open(content2, {ariaLabelledBy: 'modal-basic-title'}).result.then((result)=>{
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      })
+    } else if (mode==='delete' || mode==='link'){
+      this.selectedExpense = expenseId
     }
-    this.modalService.open(content2, {ariaLabelledBy: 'modal-basic-title'}).result.then((result)=>{
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    })
+    
   }
 
   private getDismissReason(reason: any): string {
@@ -260,6 +279,16 @@ export class EditTravelItineraryComponent implements OnInit {
     })
   }
 
+
+  async uploadToStorage(event) {
+    const id =this.selectedExpense;
+    this.ref = this.afStorage.ref(id);
+    this.task = await this.ref.put(event.target.files[0]).then((snapshot) => {
+      console.log(snapshot.downloadURL)
+      this.downloadURL = snapshot.downloadURL
+    })
+
+  }
 
    openMap (event):void {
     var geocoder = new google.maps.Geocoder();
