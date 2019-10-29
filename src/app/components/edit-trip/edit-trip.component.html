@@ -82,10 +82,11 @@
                       
                       <div class="row mat-elevation-z8 mb-3 p-3 background-white" *ngIf="showMap && eventList && eventList.length>0">
                             <agm-map [latitude]="eventList[0].latitude" [longitude]="eventList[0].longitude" [fitBounds]="true">
-                                <agm-marker *ngFor="let data of eventList"
+                                <!-- <agm-marker *ngFor="let data of eventList"
                                     [latitude]="data.latitude" [longitude]="data.longitude"
                                     [agmFitBounds]="true">
-                                </agm-marker>
+                                </agm-marker> -->
+                                <agm-direction [origin]="origin" [destination]="destination" [waypoints]="waypoints"></agm-direction>
                                 </agm-map>
                         </div>
 

@@ -53,6 +53,11 @@ export class EditTravelItineraryComponent implements OnInit {
   showMap=false;
   showBudget=false;
 
+  //google map direction
+  origin:any;
+  destination:any;
+  waypoints:any[];
+
   //firebase storage
   ref: AngularFireStorageReference;
   task: AngularFireUploadTask;
@@ -67,8 +72,7 @@ export class EditTravelItineraryComponent implements OnInit {
   displayedColumns = ['item', 'cost','staff','actions'];
   expense: Expense[];
 
-  public origin: any;
-  public destination: any;
+
 
   constructor(private router: Router, private route: ActivatedRoute,
   private ts: TravelItineraryService, private formBuilder: FormBuilder,
@@ -189,6 +193,15 @@ export class EditTravelItineraryComponent implements OnInit {
           ...e.payload.doc.data()
         } as Trip
       });
+      for(var i =0; i<this.trips.length;i++) {
+        if(i==0) {
+          this.origin = {lat:this.trips[i].latitude, lng:this.trips[i].longitude}
+        } else if (i== this.trips.length -1) {
+          this.destination = {lat:this.trips[i].latitude, lng:this.trips[i].longitude}
+        } else {
+          this.waypoints.push({lat:this.trips[i].latitude, lng:this.trips[i].longitude})
+        }
+      }
       resolve("completed");
     })
   }); 

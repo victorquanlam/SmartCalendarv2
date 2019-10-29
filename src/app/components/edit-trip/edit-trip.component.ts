@@ -42,6 +42,11 @@ export class EditTripComponent implements OnInit {
   addeventatc: any;
   showMap=false;
 
+    //google map direction
+    origin:any;
+    destination:any;
+    waypoints:any[];
+
   constructor(private router: Router, private route: ActivatedRoute,
     private ts: TripService, private formBuilder: FormBuilder,
     private userService: UserService, private eventService: EventService,
@@ -86,7 +91,16 @@ export class EditTripComponent implements OnInit {
           id:e.payload.doc.id,
           ...e.payload.doc.data()
         } as Event
-      })
+      });
+      for(var i =0; i<this.eventList.length;i++) {
+        if(i==0) {
+          this.origin = {lat:this.eventList[i].latitude, lng:this.eventList[i].longitude}
+        } else if (i== this.eventList.length -1) {
+          this.destination = {lat:this.eventList[i].latitude, lng:this.eventList[i].longitude}
+        } else {
+          this.waypoints.push({lat:this.eventList[i].latitude, lng:this.eventList[i].longitude})
+        }
+      }
     })
     
   }
