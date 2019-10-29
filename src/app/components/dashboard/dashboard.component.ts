@@ -11,6 +11,7 @@ import { UserService } from '../../user.service';
 import { User } from 'src/app/user.model';
 import { Trip } from '../../trip.model';
 import { TripService } from '../../trip.service';
+import { isThisSecond } from 'date-fns';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,7 +32,6 @@ export class DashboardComponent implements OnInit {
     private tripService: TripService
   ) { }
 
-  travelItineraries: TravelItinerary[];
   isBusy: boolean;
   selectedValue: string;
   filterDateMode: string;
@@ -40,24 +40,21 @@ export class DashboardComponent implements OnInit {
   travelItinerary: TravelItinerary[];
   selectedViewMode='';
   users: User[];
+  myData : User;
   trip: Trip[];
-  filterTravelItinerary: TravelItinerary[];
+  myTravelItinerary: TravelItinerary[];
+  allTravelItinerary: TravelItinerary[];
+  selectedTravelItitnerary: TravelItinerary[];
   listOfMonths =['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   ngOnInit() {
-    this.availableOptions = ['None', 'Staff', 'Month'];
-    this.selectedViewMode = 'none';
+    this.myData = this.authService.userData;
+    this.availableOptions = ['My Itinerary','All Itinerary', 'Staff', 'Month'];
+    this.selectedViewMode = 'myTrip';
+    this.selectedValue='My Itinerary'
     this.filterDateMode = 'Current';
-    // this.travelItineraries = this.af.list('/TravelItinerary').valueChanges();
-    // this.travelItineraryService.getTravelItinerary().subscribe(actionArray => {
-    //   this.travelItinerary = actionArray.map(e => {
-    //     // console.log(e);
-    //     return {
-    //       id: e.payload.doc.id,
-    //       ...e.payload.doc.data()
-    //     } as TravelItinerary;
-    //   });
-    // });
+
+
     this.spinner.show();
     this.getTravelItitnerary().then(() => {
       this.getUser();
@@ -68,8 +65,10 @@ export class DashboardComponent implements OnInit {
             itineraries.push(snapshot)
         }
       })
-
-      this.filterTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()})
+      this.allTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()})
+      // filter Travel Ititnerary to my trip only by default
+      this.myTravelItinerary = this.myTripFilterByEmail(this.allTravelItinerary,this.authService.userData.email)
+      this.setValue('default')
       this.spinner.hide();
     })
   }
@@ -97,6 +96,13 @@ export class DashboardComponent implements OnInit {
             ...e.payload.doc.data()
           } as User
         })
+        this.users = this.users.sort(function(a, b){
+          if(!a.displayName) { return 1; }
+          if(!b.displayName) { return -1; }
+          if(a.displayName < b.displayName) { return -1; }
+          if(a.displayName > b.displayName) { return 1; }
+          return 0;
+      })
         resolve("completed");
       })
     });
@@ -116,29 +122,6 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  toggleDone(todo: any): void {
-    // ...
-  }
-
-  updateTravelItinerary(todo: any, newValue: string): void {
-    // ...
-  }
-
-  checkIfInEmail (list, item): any {
-    var result = false;
-    if(list){
-      this.trip.forEach(function(snapshot){
-        if(snapshot.travelItinerary === list.Id){
-          if(snapshot.users){
-            if(snapshot.users.map( x => x.email).includes(item)){
-              result = true
-            }
-          }
-        }
-      })
-    }
-    return result
-  }
 
 
   sortFunc (a: TravelItinerary, b:TravelItinerary) {
@@ -161,25 +144,34 @@ export class DashboardComponent implements OnInit {
   }
 
   setValue(e){
-    let itineraries= [];
-    if(e.checked){
+    let itineraries:TravelItinerary []= [];
+    let selectedTravelItitnerary:TravelItinerary []= [];
+     if (this.selectedViewMode==='myTrip') {
+      selectedTravelItitnerary = this.myTravelItinerary
+    } else {
+      selectedTravelItitnerary = this.allTravelItinerary
+    }
+    if(e==='default' || e.checked){
         this.filterDateMode = 'Current'
-        this.travelItinerary.forEach(function(snapshot) {
+        selectedTravelItitnerary.forEach(function(snapshot) {
           if(snapshot.endsAt.toDate()>= new Date()){
             itineraries.push(snapshot)
           }
         })
       }else{
         this.filterDateMode = 'Past'
-        this.travelItinerary.forEach(function(snapshot) {
+        selectedTravelItitnerary.forEach(function(snapshot) {
           if(snapshot.endsAt.toDate()< new Date()){
             itineraries.push(snapshot)
           }
         })
       }
-      this.filterTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()
+      //sort by date
+      selectedTravelItitnerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()
       })
-}
+      this.selectedTravelItitnerary =selectedTravelItitnerary
+
+    }
 
 
   filterDate(item): any {
@@ -195,14 +187,29 @@ export class DashboardComponent implements OnInit {
     }
     return result
   }
+
+  myTripFilterByEmail(itineraries: TravelItinerary[], email:string):TravelItinerary[] {
+    const result = itineraries.filter( function (itinerary) {
+      if(itinerary.users.filter( x=> x.email === email).length>0){
+        return true
+      }
+    })
+    return result
+  }
+
   setDateFilter (item) {
-    if (item === 'None') {
+    
+    if (item === 'All Itinerary') {
       this.selectedViewMode='none'
     } else if (item === 'Staff') {
       this.selectedViewMode ='staff'
     } else if (item === 'Month') {
       this.selectedViewMode ='month'
+    } else if (item === 'My Itinerary') {
+      this.selectedViewMode ='myTrip'
     }
+    this.filterDateMode = 'Current'
+    this.setValue('default')
   }
 
 }

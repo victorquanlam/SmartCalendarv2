@@ -23,11 +23,13 @@ export class EditEventComponent implements OnInit {
   title = '';
   startsAt = '';
   endsAt = '';
+  location=';'
   id = '';
   isEditing=false;
   userList=[];
   selectedUser=[];
   closeResult: string;
+  addeventatc: any;
 
   constructor(private router: Router, private route: ActivatedRoute,
     private eventService: EventService, private formBuilder: FormBuilder,
@@ -35,6 +37,7 @@ export class EditEventComponent implements OnInit {
     private modalService: NgbModal) { }
 
   ngOnInit() {
+    setTimeout(function(){this.addeventatc.refresh();}, 200);
     this.event = this.route.snapshot.params['id'];
     this.getEvent(this.event);
     this.getUserList();
@@ -72,6 +75,9 @@ export class EditEventComponent implements OnInit {
         this.id = tmp.id;
         this.title = tmp.title;
         this.trip = tmp.trip;
+        this.startsAt = tmp.startsAt.toDate();
+        this.endsAt = tmp.endsAt.toDate();
+        this.location = tmp.location;
         this.selectedUser = tmp.users;
         this.boardsForm.setValue({
           title: tmp.title,

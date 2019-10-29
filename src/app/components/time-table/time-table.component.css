@@ -56,7 +56,7 @@
 .highlight{
     border-left: 6px solid #1976D2;
     padding: 10px;
-    width: 190px;
+    width: fit-content;
     background: whitesmoke;
 }
 

@@ -53,6 +53,7 @@ import {
   MatFormFieldModule,
   MatSlideToggleModule,
   MatDialogModule,
+  MatExpansionModule,
   MAT_DATE_LOCALE,
   MatListModule} from '@angular/material';
 import { FilterPipeModule } from 'ngx-filter-pipe';
@@ -128,6 +129,7 @@ import { DatePipe } from '@angular/common';
     MatNativeDateModule,
     MatListModule,
     MatDialogModule,
+    MatExpansionModule,
     MatGoogleMapsAutocompleteModule,
     AgmDirectionModule,
     AgmCoreModule.forRoot({

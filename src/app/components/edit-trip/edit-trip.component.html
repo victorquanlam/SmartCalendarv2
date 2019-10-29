@@ -37,7 +37,7 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="row mat-elevation-z8 mb-3 p-3 background-white">
-                            <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
+                            <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)" class="max-width">
                                     <mat-form-field class="add-full-width">
                                         <input matInput placeholder="Title" formControlName="title">
                                         <mat-error>
@@ -45,11 +45,11 @@
                                         </mat-error>
                                     </mat-form-field>
                                     <mat-form-field class="add-full-width">
-                                          <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                                          <input matInput placeholder="Start Date" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
                                           <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
                                     </mat-form-field>
                                     <mat-form-field class="add-full-width">
-                                          <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                          <input matInput placeholder="Start Date"  formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
                                           <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
                                     </mat-form-field>
                                     
@@ -81,16 +81,14 @@
                       
 
 
-                      <!-- <div title="Add to Calendar" class="addeventatc">
-                            Add to Calendar
-                            <span class="start">{{trip.startsAt | date}}</span>
-                            <span class="end">{{trip.endsAt | date}}</span>
+                      <div title="Add to Calendar" class="addeventatc">
+                            <span class="start">{{startsAt | date}}</span>
+                            <span class="end">{{endsAt| date}}</span>
                             <span class="timezone">Australia/Currie</span>
-                            <span class="title">Trip to {{trip.location}}</span>
-                            <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
-                            <span class="description">{{trip.description ? trip.description : ''}}</span>
-                            <span class="location">{{trip.location}}</span>
-                        </div> -->
+                            <span class="title">Trip {{title}}</span>
+                            <span class="attendees" *ngIf="selectedUser"><span *ngFor="let user of selectedUser">{{user.email}},</span></span>
+                            <span class="location">{{location}}</span>
+                        </div>
                       
                   </div>
 

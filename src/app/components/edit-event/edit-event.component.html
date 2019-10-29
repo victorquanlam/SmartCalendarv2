@@ -35,77 +35,78 @@
                   
                 </div>
                 <!-- Show user data when logged in -->
-                <div class="row">
+                <div class="row ">
                     <div class="col-md-12">
-                        <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
-                            <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Title" formControlName="title">
+                      <div class="row mat-elevation-z8 mb-3 p-3 background-white">
+                          <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)" class="max-width">
+                              <mat-form-field class="add-full-width">
+                                  <input matInput placeholder="Title" formControlName="title">
+                                  <mat-error>
+                                      <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
+                                  </mat-error>
+                              </mat-form-field>
+                              <mat-form-field class="add-full-width">
+                                  <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
+                                  <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
+                                  <mat-error>
+                                      <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
+                                  </mat-error>
+                              </mat-form-field>
+                              <mat-form-field class="add-full-width">
+                                  <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                  <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
+                                  <mat-error>
+                                      <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
+                                  </mat-error>
+                              </mat-form-field>
+                              
+                              <mat-form-field class="add-full-width">
+                                <input matInput
+                                  placeholder="Location" formControlName="location"
+                                  matGoogleMapsAutocomplete
+                                  (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                                  (onLocationSelected)="onLocationSelected($event)">
                                 <mat-error>
-                                    <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
+                                    <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                                 </mat-error>
-                            </mat-form-field>
+                              </mat-form-field>
+    
                             <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">
-                                <owl-date-time [pickerMode]="'dialog'" #dt5></owl-date-time>
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
-                                </mat-error>
+                              <input matInput placeholder="Airline" formControlName="airline">
                             </mat-form-field>
+    
                             <mat-form-field class="add-full-width">
-                                <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
-                                <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
-                                <mat-error>
-                                    <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
-                                </mat-error>
+                              <input matInput placeholder="Flight Detail" formControlName="flightDetail">
                             </mat-form-field>
-                            
+    
                             <mat-form-field class="add-full-width">
                               <input matInput
-                                placeholder="Location" formControlName="location"
-                                matGoogleMapsAutocomplete
-                                (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                                (onLocationSelected)="onLocationSelected($event)">
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
-                              </mat-error>
+                                   placeholder="Hotel" formControlName="hotel">
                             </mat-form-field>
-  
-                          <mat-form-field class="add-full-width">
-                            <input matInput placeholder="Airline" formControlName="airline">
-                          </mat-form-field>
-  
-                          <mat-form-field class="add-full-width">
-                            <input matInput placeholder="Flight Detail" formControlName="flightDetail">
-                          </mat-form-field>
-  
-                          <mat-form-field class="add-full-width">
-                            <input matInput
-                                 placeholder="Hotel" formControlName="hotel">
-                          </mat-form-field>
-  
-                          <mat-form-field class="add-full-width">
-                                  <mat-label>Staff</mat-label>
-                                  <mat-select formControlName="users" multiple [compareWith]="compareWithFunc">
-                                    <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-  
-                            <div class="button-row">
-                                <button type="submit" [disabled]="!boardsForm.valid" mat-fab color="primary"><mat-icon>save</mat-icon></button>
-                            </div>
-                        </form>
+    
+                            <mat-form-field class="add-full-width">
+                                    <mat-label>Staff</mat-label>
+                                    <mat-select formControlName="users" multiple [compareWith]="compareWithFunc">
+                                      <mat-option *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+    
+                              <div class="button-row">
+                                  <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-fab color="primary"><mat-icon>save</mat-icon></button>
+                              </div>
+                          </form>
+                      </div>
+                        
+                    </div>
 
-
-                        <!-- <div title="Add to Calendar" class="addeventatc">
-                            Add to Calendar
-                            <span class="start">{{trip.startsAt | date}}</span>
-                            <span class="end">{{trip.endsAt | date}}</span>
-                            <span class="timezone">Australia/Currie</span>
-                            <span class="title">Trip to {{trip.location}}</span>
-                            <span class="attendees" v-if="trip.users"><span ng-repeat="user in trip.users track by $index">{{user.email}},</span></span>
-                            <span class="description">{{trip.description ? trip.description : ''}}</span>
-                            <span class="location">{{trip.location}}</span>
-                        </div> -->
+                    <div title="Add to Calendar" class="addeventatc">
+                        Add to Calendar
+                        <span class="start">{{startsAt | date}}</span>
+                        <span class="end">{{endsAt| date}}</span>
+                        <span class="timezone">Australia/Currie</span>
+                        <span class="title">Trip {{title}}</span>
+                        <span class="attendees" *ngIf="selectedUser"><span *ngFor="let user of selectedUser">{{user.email}},</span></span>
+                        <span class="location">{{location}}</span>
                     </div>
                 </div>
             </div>

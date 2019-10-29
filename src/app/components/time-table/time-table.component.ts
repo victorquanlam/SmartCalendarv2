@@ -11,9 +11,11 @@ import { FilterPipe } from 'ngx-filter-pipe';
 import { TravelItinerary } from '../../travel-itinerary.model';
 import { Trip } from '../../trip.model';
 import { Event } from '../../event.model';
+import { User } from '../../user.model';
 import { TravelItineraryService } from '../../travel-itinerary.service';
 import { TripService } from '../../trip.service';
 import { EventService } from '../../event.service';
+import { UserService } from '../../user.service';
 import {
   startOfDay,
   endOfDay,
@@ -69,7 +71,8 @@ export class TimeTableComponent implements OnInit {
     private travelItineraryService: TravelItineraryService,
     private tripService: TripService,
     private eventService: EventService,
-    public modal: NgbModal
+    public modal: NgbModal,
+    private userService: UserService
   ) {
     this.events = [];
   }
@@ -81,30 +84,56 @@ export class TimeTableComponent implements OnInit {
   availableOptions: any[];
   dateFilter: Observable<any[]>;
   travelItinerary: TravelItinerary[];
-  trip: Trip[];
-  eventList: Event[];
+  trip: Trip[] = [];
+  eventList: Event[] = [];
   events: CalendarEvent[];
-  selectedOptions: any;
+  users: User[];
+  selectedOptions: TravelItinerary[];
+  selectedUserOptions: User[];
   ngOnInit() {
     this.filterDateMode = 'upcoming';
     this.spinner.show();
 
     // now we are waiting
     this.getTravelItitnerary().then(() => {
+      this.getUser();
       this.getTrip().then(() => {
         this.getEvent().then(() => {
-          this.assignEvents();
+          this.assignEvents([],'');
+          this.spinner.hide();
         });
       });
     });
   }
 
+  clearItineraryFilter():void{
+    this.selectedOptions = undefined;
+  }
+
+  clearStaffFilter() : void {
+    this.selectedUserOptions = undefined;
+  }
+
+  clearFilter():void {
+    this.selectedUserOptions = undefined;
+    this.selectedOptions = undefined;
+  }
+  
   //assign events
-  assignEvents(travelItinerary = []) {
+  assignEvents(travelItinerary: TravelItinerary[], type: string) {
+    if(type==='user'){
+      if(travelItinerary.length ===0){
+        this.events = [];
+        return
+      }
+    }
     // lists to filter trips and events
-    let filteredTrips = [];
-    let filteredEvents = [];
-    let filterItinerary = [];
+    let filteredTrips: Trip[] =[];
+    let filteredEvents: Event[] =[];
+    let filterItinerary:TravelItinerary[] =[];
+
+    let allTrips = this.trip;
+    let allEvents = this.eventList;
     this.events = [];
     // Calender Initialization
     const getStart: any = {
@@ -120,32 +149,34 @@ export class TimeTableComponent implements OnInit {
     // Dates format
     const sDate = format(getStart(this.viewDate), 'YYYY-MM-DD');
     const eDate = format(getEnd(this.viewDate), 'YYYY-MM-DD');
-    if (travelItinerary.length > 0) {
-      filteredTrips = this.trip.filter((trip) => {
-        return travelItinerary.indexOf(trip.travelItinerary) > -1
-      });
-    } else {
-      filteredTrips = this.trip;
-    }
-    if (travelItinerary.length > 0) {
-      for (let i = 0; i < this.eventList.length; i++) {
-        for (let j = 0; j < filteredTrips.length; j++) {
-          if (this.eventList[i].trip === filteredTrips[j].id) {
-            filteredEvents.push(this.eventList[i]);
+    if(travelItinerary.length > 0){
+      filterItinerary = travelItinerary
+      filterItinerary.forEach(function(snapshot) {
+
+        const trips= allTrips.filter(x => x.travelItinerary === snapshot.id)
+        trips.forEach(function(childSnapshot){
+          
+          if(filteredTrips.indexOf(childSnapshot) === -1) {
+            filteredTrips.push(childSnapshot)
           }
-        }
-      }
-    } else {
-      filteredEvents = this.eventList;
+        })
+      })
+
+      filteredTrips.forEach(function(snapshot) {
+        const events = allEvents.filter( x => x.trip === snapshot.id)
+        events.forEach(function(childSnapshot) {
+          if(filteredEvents.indexOf(childSnapshot) === -1) {
+            filteredEvents.push(childSnapshot)
+          }
+        })
+      })
+    }  else {
+        filteredTrips = this.trip;
+        filteredEvents = this.eventList;
+        filterItinerary = this.travelItinerary;
     }
 
-    if(travelItinerary.length > 0){
-      travelItinerary.map((snapshot) => {
-        filterItinerary = this.travelItinerary.filter(x => x.id === snapshot)
-      })
-    } else {
-      filterItinerary = this.travelItinerary
-    }
+    
     
     filterItinerary.map((snapshot) => {
       this.events.push({
@@ -185,10 +216,44 @@ export class TimeTableComponent implements OnInit {
     })
   }
 
-  onNgModelChange(e) {
-    this.assignEvents(e);
+  onTravelNgModelChange(e) {
+    this.assignEvents(e,'');
   }
 
+  onNgUserModelChange(e) {
+    let allTravelItinerary = this.travelItinerary
+    let travelItineraries: TravelItinerary[]=[];
+    
+    if(e.length ===0){
+      this.assignEvents(travelItineraries,'');
+      return
+    }
+
+    e.forEach(function(snapshot){
+      const travelItinerary = allTravelItinerary.filter( function (itinerary) {
+        if(itinerary.users.filter( x=> x.email === snapshot.email).length>0){
+          return true
+        }
+      })
+      travelItinerary.forEach(function(childSnapshot){
+        if(travelItineraries.indexOf(childSnapshot) === -1) {
+          travelItineraries.push(childSnapshot)
+        }
+      })
+    })
+
+    console.log(travelItineraries)
+    this.assignEvents(travelItineraries,'user')
+  }
+
+  myTripFilterByEmail(itineraries: TravelItinerary[], email:string):TravelItinerary[] {
+    const result = itineraries.filter( function (itinerary) {
+      if(itinerary.users.filter( x=> x.email === email).length>0){
+        return true
+      }
+    })
+    return result
+  }
 
   generateEventView(e): any {
     return {
@@ -200,6 +265,20 @@ export class TimeTableComponent implements OnInit {
   }
 
   //get Data
+
+  getUser() {
+    return new Promise((resolve, reject) => {
+      this.userService.getUsers().subscribe(actionArray => {
+        this.users = actionArray.map(e => {
+          return {
+            uid: e.payload.doc.id,
+            ...e.payload.doc.data()
+          } as User;
+        });
+        resolve("completed");
+      })
+    });
+  }
 
   getTravelItitnerary() {
     return new Promise((resolve, reject) => {
@@ -232,6 +311,7 @@ export class TimeTableComponent implements OnInit {
   getEvent() {
     return new Promise((resolve, reject) => {
       this.eventService.getEvents().subscribe(actionArray => {
+        
         this.eventList = actionArray.map(e => {
           return {
             id: e.payload.doc.id,

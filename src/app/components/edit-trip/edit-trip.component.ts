@@ -29,6 +29,7 @@ export class EditTripComponent implements OnInit {
   boardsForm: FormGroup;
   title = '';
   startsAt = '';
+  location = '';
   endsAt = '';
   id = '';
   isEditing=false;
@@ -36,13 +37,17 @@ export class EditTripComponent implements OnInit {
   eventList: Event[];
   selectedUser=[];
   closeResult: string;
+  addeventatc: any;
 
   constructor(private router: Router, private route: ActivatedRoute,
     private ts: TripService, private formBuilder: FormBuilder,
     private userService: UserService, private eventService: EventService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal) {
+     }
 
   ngOnInit() {
+    
+    setTimeout(function(){this.addeventatc.refresh();}, 200);
     this.trip = this.route.snapshot.params['id'];
     this.getTrip(this.trip);
     this.getUserList();
@@ -145,6 +150,9 @@ export class EditTripComponent implements OnInit {
         this.travelItinerary = tmp.travelItinerary;
         this.id = tmp.id;
         this.title = tmp.title;
+        this.startsAt = tmp.startsAt.toDate();
+        this.endsAt = tmp.endsAt.toDate();
+        this.location = tmp.location||'';
         this.selectedUser = tmp.users? tmp.users:[];
         this.boardsForm.setValue({
           title: tmp.title,

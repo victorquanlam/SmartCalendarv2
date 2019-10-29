@@ -707,7 +707,7 @@ body .table thead th {
   }
 
   .sidebar {
-    padding: 40px 0 0;
+    padding: 0;
   }
 
   footer br {
@@ -734,10 +734,8 @@ body .table thead th {
   }
 
   .fixed-top {
-    position: absolute;
+    position: inherit;
   overflow: hidden;
-  bottom: 0;
-  top:unset;
   }
 
   .authBlock {

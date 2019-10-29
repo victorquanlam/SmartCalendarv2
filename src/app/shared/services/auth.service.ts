@@ -104,7 +104,6 @@ export class AuthService {
        this.ngZone.run(() => {
           this.router.navigate(['dashboard']);
         });
-      this.SetUserData(result.user);
     }).catch((error) => {
       window.alert(error);
     });
@@ -115,7 +114,7 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-
+    console.log(user)
     const userData: User = {
       uid: user.uid,
       email: user.email,
@@ -124,7 +123,7 @@ export class AuthService {
       emailVerified: user.emailVerified,
       firstName: user.firstName?user.firstName:'',
       lastName: user.lastName?user.lastName:'',
-      role: user.role?user.role:'',
+      role: user.role? user.role: ''
     };
     console.log(userData)
     return userRef.set(userData, {
