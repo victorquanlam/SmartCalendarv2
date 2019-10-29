@@ -30,6 +30,8 @@ export class EditTripComponent implements OnInit {
   title = '';
   startsAt = '';
   location = '';
+  latitude='';
+  longitude='';
   endsAt = '';
   id = '';
   isEditing=false;
@@ -38,6 +40,7 @@ export class EditTripComponent implements OnInit {
   selectedUser=[];
   closeResult: string;
   addeventatc: any;
+  showMap=false;
 
   constructor(private router: Router, private route: ActivatedRoute,
     private ts: TripService, private formBuilder: FormBuilder,
@@ -90,10 +93,17 @@ export class EditTripComponent implements OnInit {
 
 
   onAutocompleteSelected (result: PlaceResult) {
-    console.log(result)
     this.boardsForm.patchValue({
       location: result.formatted_address
     })
+  }
+
+  enableMap() {
+    if(this.showMap){
+      this.showMap = false
+    } else {
+      this.showMap = true
+    }
   }
 
   private dateLessThan(from: string, to: string) {
@@ -109,10 +119,9 @@ export class EditTripComponent implements OnInit {
     }
   }
 
-  onLocationSelected(location: Location) {
-    console.log('onLocationSelected: ', location);
-    // this.latitude = location.latitude;
-    // this.longitude = location.longitude;
+  onLocationSelected(location: any) {
+    this.latitude = location.latitude;
+    this.longitude = location.longitude;
   }
 
 
@@ -172,8 +181,9 @@ export class EditTripComponent implements OnInit {
 
   onFormSubmit(form: NgForm) {
     this.isEditing=false;
-    const trip ={...form};
+    const trip ={...form,latitude:this.latitude, longitude:this.longitude, travelItinerary:this.travelItinerary};
     this.ts.updateTrip(this.route.snapshot.params['id'],trip)
+    console.log(this.travelItinerary)
     this.boardsForm.disable();
   }
 

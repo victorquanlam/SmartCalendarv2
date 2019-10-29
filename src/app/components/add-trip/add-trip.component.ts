@@ -20,6 +20,8 @@ export class AddTripComponent implements OnInit {
   userList=[];
   location ='';
   travelItinerary='';
+  latitude='';
+  longitude='';
 
   constructor(private router: Router ,private userService: UserService, private route: ActivatedRoute , private travelItineraryService: TravelItineraryService, private ts: TripService, private formBuilder: FormBuilder) { }
 
@@ -91,12 +93,13 @@ export class AddTripComponent implements OnInit {
     })
   }
 
-  onLocationSelected(result) {
-
+  onLocationSelected(location: any) {
+    this.latitude = location.latitude;
+    this.longitude = location.longitude;
   }
 
   onFormSubmit(form: NgForm) {
-    this.ts.createTrip(form);
+    this.ts.createTrip({...form,latitude:this.latitude, longitude:this.longitude, travelItinerary:this.travelItinerary});
     this.router.navigate(['/edit-travel-itinerary/',this.route.snapshot.params['id']]);
   }
 

@@ -25,6 +25,8 @@ export class AddEventComponent implements OnInit {
   hotel='';
   userList=[];
   trip='';
+  latitude='';
+  longitude='';
 
   constructor(private router: Router ,private userService: UserService, private tripService:TripService,private route: ActivatedRoute , private ts: EventService, private formBuilder: FormBuilder) { }
 
@@ -84,13 +86,14 @@ export class AddEventComponent implements OnInit {
   }
 
   onFormSubmit(form: NgForm) {
-    this.ts.createEvent(form);
+    this.ts.createEvent({...form, trip:this.trip, longitude: this.longitude, latitude: this.latitude});
     this.router.navigate(['/edit-trip/',this.route.snapshot.params['id']]);
   }
 
 
-  onLocationSelected(result){
-    console.log(result)
+  onLocationSelected(location: any){
+    this.latitude = location.latitude;
+    this.longitude = location.longitude;
   }
 
   onAutocompleteSelected(result: PlaceResult) {

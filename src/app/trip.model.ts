@@ -7,4 +7,6 @@ export class Trip {
     endsAt: any;
     travelItinerary: String;
     users: any[];
+    latitude:string;
+    longitude:string;
   }

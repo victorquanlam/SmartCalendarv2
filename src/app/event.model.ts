@@ -9,4 +9,6 @@ export class Event {
     airline: string;
     flightDetail: string;
     hotel: string;
+    latitude:string;
+    longitude: string
   }

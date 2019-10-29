@@ -50,6 +50,8 @@ export class EditTravelItineraryComponent implements OnInit {
   currentUser=this.authService.userData;
   closeResult: string;
   selectedExpense ='';
+  showMap=false;
+  showBudget=false;
 
   //firebase storage
   ref: AngularFireStorageReference;
@@ -109,6 +111,22 @@ export class EditTravelItineraryComponent implements OnInit {
        };
      }
      return {};
+    }
+  }
+
+  enableMap() {
+    if(this.showMap){
+      this.showMap = false
+    } else {
+      this.showMap = true
+    }
+  }
+
+  enableBudget () {
+    if(this.showBudget){
+      this.showBudget = false
+    } else {
+      this.showBudget = true
     }
   }
 

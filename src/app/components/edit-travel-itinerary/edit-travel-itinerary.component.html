@@ -31,6 +31,8 @@
                 <div class="pt-1 pb-2 mt-3 mb-3 border-bottom d-flex flex-row align-items-centers">
                     <h1 class="h2 mt-auto mb-auto mr-2 back-header" routerLink="/dashboard"><span class="back-button-highlight"><mat-icon>arrow_back_ios</mat-icon></span><span class="highlight">Travel Itinerary {{title}}</span></h1>
                     <button class="mr-2" type="button" mat-mini-fab color="primary" [hidden]="isEditing" (click)="enableEdit()"><mat-icon>edit</mat-icon></button>
+                    <button class="mr-2" type="button" mat-mini-fab color="secondary" [hidden]="isEditing" (click)="enableBudget()"><mat-icon>attach_money</mat-icon></button>
+                    <button class="mr-2" type="button" mat-mini-fab color="secondary" [hidden]="isEditing" (click)="enableMap()"><mat-icon>map</mat-icon></button>
                     <button mat-button mat-mini-fab color="red" (click)="open(content)"><mat-icon>delete</mat-icon></button>
                 </div>
                 <!-- Show user data when logged in -->
@@ -73,7 +75,7 @@
                                     </form>
                         </div>
                         
-                        <div class="row">
+                        <div class="row mb-3" *ngIf="showBudget">
                                 <div class="example-container mat-elevation-z8 background-white">
                                         <table mat-table [dataSource]="expense">
                                           <!-- Item Column -->
@@ -114,6 +116,15 @@
                                         </table>
                                       </div>
                         </div>
+
+                        <div class="row mat-elevation-z8 mb-3 p-3 background-white" *ngIf="showMap && trips && trips.length>0">
+                            <agm-map [latitude]="trips[0].latitude" [longitude]="trips[0].longitude" [fitBounds]="true">
+                                <agm-marker *ngFor="let data of trips"
+                                    [latitude]="data.latitude" [longitude]="data.longitude"
+                                    [agmFitBounds]="true">
+                                </agm-marker>
+                                </agm-map>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
@@ -136,16 +147,11 @@
                             </a>
                         </div>
                     </div>
+
+
                 </div>
 
-                <!-- <div class="row">
-                    <agm-map [latitude]="lat" [longitude]="lng" [fitBounds]="true">
-                        <agm-marker *ngFor="let data of listOfLocations"
-                            [latitude]="data.lat" [longitude]="data.long"
-                            [agmFitBounds]="true">
-                        </agm-marker>
-                      </agm-map>
-                </div> -->
+                
             </div>
         </main>
     </div>

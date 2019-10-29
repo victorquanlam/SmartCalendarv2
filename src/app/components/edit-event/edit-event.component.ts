@@ -25,6 +25,8 @@ export class EditEventComponent implements OnInit {
   endsAt = '';
   location=';'
   id = '';
+  latitude='';
+  longitude='';
   isEditing=false;
   userList=[];
   selectedUser=[];
@@ -147,8 +149,7 @@ export class EditEventComponent implements OnInit {
 
   onFormSubmit(form: NgForm) {
     this.isEditing=false;
-    const trip ={...form};
-    console.log(trip)
+    const trip ={...form, latitude:this.latitude, longitude:this.longitude, trip:this.trip};
     this.eventService.updateEvent(this.route.snapshot.params['id'],trip)
     this.boardsForm.disable();
   }
