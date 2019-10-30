@@ -98,8 +98,8 @@
                       </div>
                         
                     </div>
-
-                    <div title="Add to Calendar" class="addeventatc">
+                    <div class="text-center mb-2">
+                      <div title="Add to Calendar" class="addeventatc">
                         Add to Calendar
                         <span class="start">{{startsAt | date}}</span>
                         <span class="end">{{endsAt| date}}</span>
@@ -108,6 +108,8 @@
                         <span class="attendees" *ngIf="selectedUser"><span *ngFor="let user of selectedUser">{{user.email}},</span></span>
                         <span class="location">{{location}}</span>
                     </div>
+                    </div>
+                    
                 </div>
             </div>
         </main>

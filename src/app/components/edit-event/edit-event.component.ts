@@ -110,8 +110,9 @@ export class EditEventComponent implements OnInit {
     })
   }
 
-  onLocationSelected(result) {
-    console.log(result)
+  onLocationSelected(location: any) {
+    this.latitude = location.latitude;
+    this.longitude = location.longitude;
   }
 
   enableEdit() {

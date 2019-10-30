@@ -56,7 +56,7 @@ export class EditTravelItineraryComponent implements OnInit {
   //google map direction
   origin:any;
   destination:any;
-  waypoints:any[];
+  waypoints:any[] =[];
 
   //firebase storage
   ref: AngularFireStorageReference;
@@ -199,7 +199,8 @@ export class EditTravelItineraryComponent implements OnInit {
         } else if (i== this.trips.length -1) {
           this.destination = {lat:this.trips[i].latitude, lng:this.trips[i].longitude}
         } else {
-          this.waypoints.push({lat:this.trips[i].latitude, lng:this.trips[i].longitude})
+          this.waypoints.push({location : {lat:this.trips[i].latitude, lng:this.trips[i].longitude}})
+          console.log(this.waypoints)
         }
       }
       resolve("completed");

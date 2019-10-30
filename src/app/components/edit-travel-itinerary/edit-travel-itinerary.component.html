@@ -118,7 +118,7 @@
                         </div>
 
                         <div class="row mat-elevation-z8 mb-3 p-3 background-white" *ngIf="showMap && trips && trips.length>0">
-                            <agm-map [latitude]="trips[0].latitude" [longitude]="trips[0].longitude" [fitBounds]="true">
+                            <agm-map [latitude]="origin.lat" [longitude]="origin.lng" [fitBounds]="true">
                                 <!-- <agm-marker *ngFor="let data of trips"
                                     [latitude]="data.latitude" [longitude]="data.longitude"
                                     [agmFitBounds]="true">
