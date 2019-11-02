@@ -626,9 +626,6 @@ body .table thead th {
 
 /* Responsive */
 @media(max-width:767px) {
-  .mat-form-field-infix{
-    width: 100px!important;
-  }
   .sidebar {
     position: static;
     padding: 40px 0 10px;

@@ -11,6 +11,9 @@
     text-align: center;
 }
 
+.row {
+    margin-left: 0;
+}
 
 .max-width {
     width: 100%;
@@ -47,10 +50,7 @@
 .highlight-itinerary {
     border-left: 6px solid #1976D2;
 }
-.row {
-    margin-left: 0;
-    margin-right: 0;
-}
+
 
 /*highlight items */
 .highlightItems{
@@ -89,5 +89,3 @@
     height: 95%;
     overflow-y: auto;
 }
-
-
