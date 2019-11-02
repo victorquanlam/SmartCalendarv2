@@ -91,11 +91,3 @@
     height: 95%;
     overflow-y: auto;
 }
-
-/* Just for mobile */
-@media screen {
-    .row{
-        margin-left: 0;
-        margin-right: 0;
-    }
-}

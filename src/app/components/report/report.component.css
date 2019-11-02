@@ -44,11 +44,3 @@
     width: 130px;
     background: whitesmoke;
 }
-
-/* Just for mobile */
-@media screen {
-    .row{
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
