@@ -37,6 +37,7 @@ export class ManageComponent implements OnInit {
       'role' : [null, Validators.required],
       'uid' : [null, Validators.required],
     });
+    this.boardsForm.controls['uid'].disable()
   }
 
   getUser() {

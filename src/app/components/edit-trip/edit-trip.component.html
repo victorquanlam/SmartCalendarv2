@@ -41,6 +41,11 @@
                             <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)" class="max-width">
                                     <mat-form-field class="add-full-width">
                                         <input matInput placeholder="Title" formControlName="title">
+
+                                        <button mat-button type="button" *ngIf="boardsForm.get('title').value && !boardsForm.get('title').disabled" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['title'].patchValue('', {emitEvent: true})">
+                                            <mat-icon>close</mat-icon>
+                                        </button>   
+
                                         <mat-error>
                                             <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
                                         </mat-error>
@@ -64,6 +69,10 @@
                                           matGoogleMapsAutocomplete
                                           (onAutocompleteSelected)="onAutocompleteSelected($event)"
                                           (onLocationSelected)="onLocationSelected($event)">
+                                        <button mat-button type="button" *ngIf="boardsForm.get('location').value && !boardsForm.get('location').disabled" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['location'].patchValue('', {emitEvent: true})">
+                                            <mat-icon>close</mat-icon>
+                                        </button>   
+
                                       <mat-error>
                                           <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                                       </mat-error>
@@ -82,11 +91,20 @@
                       
                       <div class="row mat-elevation-z8 mb-3 p-3 background-white" *ngIf="showMap && eventList && eventList.length>0">
                             <agm-map [latitude]="origin.lat" [longitude]="origin.lng" [fitBounds]="true">
-                                <!-- <agm-marker *ngFor="let data of eventList"
-                                    [latitude]="data.latitude" [longitude]="data.longitude"
-                                    [agmFitBounds]="true">
-                                </agm-marker> -->
-                                <agm-direction [origin]="origin" [destination]="destination" [waypoints]="waypoints"></agm-direction>
+                               
+                                    <agm-marker *ngFor="let data of eventList"
+                                        [label]="{color: 'black', text: data.title}"
+                                        [latitude]="data.latitude" [longitude]="data.longitude"
+                                        [agmFitBounds]="true">
+                                    </agm-marker>
+                                    <agm-polyline [editable]="true">
+                                        <agm-polyline-point *ngFor="let data of eventList" 
+                                            [latitude]="data.latitude"
+                                            [longitude]="data.longitude">
+                                        </agm-polyline-point>
+                                    </agm-polyline>
+                                   
+                                <!-- <agm-direction [origin]="origin" [destination]="destination" [waypoints]="waypoints"></agm-direction> -->
                                 </agm-map>
                         </div>
 

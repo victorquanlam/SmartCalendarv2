@@ -10,7 +10,7 @@
       "/"
     ],
     "cacheConfig": {
-      "maxSize": 100,
+      "maxSize": 10000,
       "maxAge": "1h",
       "timeout": "2s",
       "strategy": "freshness"
@@ -20,7 +20,7 @@
     "urls": [
     ],
     "cacheConfig": {
-      "maxSize": 100,
+      "maxSize": 10000,
       "maxAge": "1d",
       "strategy": "performance"
     }

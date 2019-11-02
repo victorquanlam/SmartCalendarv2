@@ -37,6 +37,11 @@
                       <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
                           <mat-form-field class="add-full-width">
                               <input matInput placeholder="Title" formControlName="title">
+
+                              <button mat-button type="button" *ngIf="boardsForm.get('title').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['title'].patchValue('', {emitEvent: true})">
+                                <mat-icon>close</mat-icon>
+                                </button> 
+
                               <mat-error>
                                   <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
                               </mat-error>
@@ -65,6 +70,11 @@
                                 matGoogleMapsAutocomplete
                                 (onAutocompleteSelected)="onAutocompleteSelected($event)"
                                 (onLocationSelected)="onLocationSelected($event)">
+
+                                <button mat-button type="button" *ngIf="boardsForm.get('location').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['location'].patchValue('', {emitEvent: true})">
+                                    <mat-icon>close</mat-icon>
+                                    </button> 
+
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                             </mat-error>

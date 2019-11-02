@@ -94,6 +94,8 @@ export class EditTripComponent implements OnInit {
       });
       for(var i =0; i<this.eventList.length;i++) {
         if(i==0) {
+          console.log(this.eventList)
+          
           this.origin = {lat:this.eventList[i].latitude, lng:this.eventList[i].longitude}
           console.log(this.origin)
         } else if (i== this.eventList.length -1) {

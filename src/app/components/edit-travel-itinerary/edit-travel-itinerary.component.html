@@ -42,6 +42,11 @@
                                 <form class="max-width" [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
                                         <mat-form-field class="add-full-width">
                                             <input matInput placeholder="Title" formControlName="title">
+                                            
+                                            <button mat-button type="button" *ngIf="boardsForm.get('title').value && !boardsForm.get('title').disabled" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['title'].patchValue('', {emitEvent: true})">
+                                                <mat-icon>close</mat-icon>
+                                                </button> 
+
                                             <mat-error>
                                                 <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
                                             </mat-error>
@@ -119,11 +124,17 @@
 
                         <div class="row mat-elevation-z8 mb-3 p-3 background-white" *ngIf="showMap && trips && trips.length>0">
                             <agm-map [latitude]="origin.lat" [longitude]="origin.lng" [fitBounds]="true">
-                                <!-- <agm-marker *ngFor="let data of trips"
+                                <agm-marker *ngFor="let data of trips"
+                                    [label]="{color: 'black', text: data.title}"    
                                     [latitude]="data.latitude" [longitude]="data.longitude"
                                     [agmFitBounds]="true">
-                                </agm-marker> -->
-                                <agm-direction [origin]="origin" [destination]="destination" [waypoints]="waypoints"></agm-direction>
+                                </agm-marker>
+                                <agm-polyline [editable]="true">
+                                    <agm-polyline-point *ngFor="let data of trips" 
+                                        [latitude]="data.latitude"
+                                        [longitude]="data.longitude">
+                                    </agm-polyline-point>
+                                </agm-polyline>
                                 </agm-map>
                         </div>
                     </div>

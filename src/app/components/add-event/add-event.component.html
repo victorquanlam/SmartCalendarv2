@@ -37,6 +37,10 @@
                       <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
                           <mat-form-field class="add-full-width">
                               <input matInput placeholder="Title" formControlName="title">
+                              <button mat-button type="button" *ngIf="boardsForm.get('title').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['title'].patchValue('', {emitEvent: true})">
+                                <mat-icon>close</mat-icon>
+                                </button> 
+
                               <mat-error>
                                   <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
                               </mat-error>
@@ -66,6 +70,9 @@
                                 matGoogleMapsAutocomplete
                                 (onAutocompleteSelected)="onAutocompleteSelected($event)"
                                 (onLocationSelected)="onLocationSelected($event)">
+                                <button mat-button type="button" *ngIf="boardsForm.get('location').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['location'].patchValue('', {emitEvent: true})">
+                                    <mat-icon>close</mat-icon>
+                                    </button> 
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                             </mat-error>
@@ -73,15 +80,24 @@
 
                         <mat-form-field class="add-full-width">
                           <input matInput placeholder="Airline" formControlName="airline">
+                          <button mat-button type="button" *ngIf="boardsForm.get('airline').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['airline'].patchValue('', {emitEvent: true})">
+                            <mat-icon>close</mat-icon>
+                            </button> 
                         </mat-form-field>
 
                         <mat-form-field class="add-full-width">
                           <input matInput placeholder="Flight Detail" formControlName="flightDetail">
+                          <button mat-button type="button" *ngIf="boardsForm.get('flightDetail').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['flightDetail'].patchValue('', {emitEvent: true})">
+                            <mat-icon>close</mat-icon>
+                            </button> 
                         </mat-form-field>
 
                         <mat-form-field class="add-full-width">
                             <input matInput
                                 placeholder="Hotel" formControlName="hotel">
+                                <button mat-button type="button" *ngIf="boardsForm.get('hotel').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['hotel'].patchValue('', {emitEvent: true})">
+                                    <mat-icon>close</mat-icon>
+                                    </button> 
                         </mat-form-field>
 
                         <mat-form-field class="add-full-width">

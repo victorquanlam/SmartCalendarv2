@@ -17,19 +17,20 @@ export class RoleGuardService  implements CanActivate {
      role ='';
      canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const user = this.authService.userData;
-      this.getUserRole(user.uid).then(() => {
-        if (this.role === 'Admin') {
-          console.log(this.role)
-          return true;
-        } else {
-          alert('Only Admin can have access to this page.')
-          // navigate to not found page
-          this.router.navigate(['/dashboard']);
-          return false;
-        }
-        
-      })
-      
+      if(user){
+        this.getUserRole(user.uid).then(() => {
+          if (this.role === 'Admin') {
+            console.log(this.role)
+            return true;
+          } else {
+            alert('Only Admin can have access to this page.')
+            // navigate to not found page
+            this.router.navigate(['/dashboard']);
+            return false;
+          }
+          
+        })
+      }
         return true;
     }
 

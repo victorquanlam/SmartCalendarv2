@@ -37,9 +37,13 @@
                         <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
                             <mat-form-field class="add-full-width">
                                 <input matInput placeholder="Title" formControlName="title">
+                                <button mat-button type="button" *ngIf="boardsForm.get('title').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['title'].patchValue('', {emitEvent: true})">
+                                <mat-icon>close</mat-icon>
+                                </button> 
+
                                 <mat-error>
                                     <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Title</span>
-                            </mat-error>
+                                </mat-error>
                             </mat-form-field>
                             <mat-form-field class="add-full-width">
                                     <input matInput placeholder="Start Date"  [value]="startsAt" formControlName="startsAt" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5">

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore,
+    public afAuth: AngularFireAuth) { }
 
   getUsers() {
     return this.firestore.collection('users').snapshotChanges();
@@ -17,7 +19,12 @@ export class UserService {
   }
 
   createUser(data: any) {
-    return this.firestore.collection('users').add(data);
+    this.afAuth.auth.createUserWithEmailAndPassword(data.email,'Password123$').then((result) => {
+      return this.firestore.collection('users').add({...data,emailVerified:true});
+    }).catch((error) => {
+      window.alert(error.message);
+    });
+    
   }
 
   updateUser(id:string, data: any) {

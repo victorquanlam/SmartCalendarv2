@@ -38,10 +38,9 @@ export class AuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.ngZone.run(() => {
-          console.log('ok Working');
           this.router.navigate(['dashboard']);
         });
-        this.SetUserData(result.user);
+        // this.SetUserData(result.user);
       }).catch((error) => {
         window.alert(error.message);
       });
@@ -84,8 +83,10 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       if (!user.emailVerified) {
-        window.alert('You need to verified your email.');
+        window.alert('Please verified your email');
       }
+    } else {
+      window.alert('You are not logged in');
     }
     // will turn this on when we can set emailVerified by Admin
     return (user !== null && user.emailVerified !== false) ? true : false;
