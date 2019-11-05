@@ -66,8 +66,9 @@ export class DashboardComponent implements OnInit {
         }
       })
       this.allTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()})
+      
       // filter Travel Ititnerary to my trip only by default
-      this.myTravelItinerary = this.myTripFilterByEmail(this.allTravelItinerary,this.authService.userData.email)
+      this.myTravelItinerary = this.myTripFilterByEmail(this.travelItinerary,this.authService.userData.email)
       this.setValue('default')
       this.spinner.hide();
     })
@@ -149,7 +150,7 @@ export class DashboardComponent implements OnInit {
      if (this.selectedViewMode==='myTrip') {
       selectedTravelItitnerary = this.myTravelItinerary
     } else {
-      selectedTravelItitnerary = this.allTravelItinerary
+      selectedTravelItitnerary = this.travelItinerary
     }
     if(e==='default' || e.checked){
         this.filterDateMode = 'Current'
@@ -162,6 +163,7 @@ export class DashboardComponent implements OnInit {
         this.filterDateMode = 'Past'
         selectedTravelItitnerary.forEach(function(snapshot) {
           if(snapshot.endsAt.toDate()< new Date()){
+            
             itineraries.push(snapshot)
           }
         })
