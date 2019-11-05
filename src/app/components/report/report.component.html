@@ -37,32 +37,61 @@
               <div class="row max-width">
                   <div class="list-group max-width min-height">
                       <form [formGroup]="boardsForm" (ngSubmit)="onFormSubmit(boardsForm.value)">
-                          <mat-form-field class="add-full-width">
-                              <input matInput placeholder="Title" formControlName="title">
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Report Title</span>
-                              </mat-error>
-                          </mat-form-field>
-                          <mat-form-field class="add-full-width">
-                              <input matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Start Date">
-                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                              <mat-datepicker #picker></mat-datepicker>
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
-                              </mat-error>
-                          </mat-form-field>
-                          <mat-form-field class="add-full-width">
-                              <input matInput [matDatepicker]="endPicker" formControlName="endsAt" placeholder="End Date">
-                              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                              <mat-datepicker #endPicker></mat-datepicker>
-                              <mat-error>
-                                  <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
-                              </mat-error>
-                          </mat-form-field>
+                          <div class='row'>
+                                <mat-form-field class="add-full-width">
+                                        <input matInput placeholder="Report Title" formControlName="title">
+                                        <mat-error>
+                                            <span *ngIf="!boardsForm.get('title').valid && boardsForm.get('title').touched">Please enter Report Title</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                          </div>
+                          
 
-                          <mat-error class="add-full-width custom-validator-error">
-                            <span *ngIf="boardsForm.errors">Start Date should be less than End Date</span>
-                        </mat-error>
+                          <div class="row">
+                              <div class=" col-md-6 pl-0">
+                                <mat-form-field class="add-full-width">
+                                    <input matInput [matDatepicker]="picker" formControlName="startsAt" placeholder="Start Date">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <mat-error>
+                                        <span *ngIf="!boardsForm.get('startsAt').valid && boardsForm.get('startsAt').touched">Please enter Start Date</span>
+                                    </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class=" col-md-6 pr-0">
+                                <mat-form-field class="add-full-width">
+                                    <input matInput [matDatepicker]="endPicker" formControlName="endsAt" placeholder="End Date">
+                                    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #endPicker></mat-datepicker>
+                                    <mat-error>
+                                        <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <mat-error class="add-full-width custom-validator-error text-center">
+                                <span *ngIf="boardsForm.errors">Start Date should be less than End Date</span>
+                            </mat-error>
+                          </div>
+                          <div class='row'>
+                                <div class="add-full-width">
+                                <mat-checkbox formControlName="trip">Include Trips</mat-checkbox>
+                                </div>
+    
+                                <div class="add-full-width">
+                                    <mat-checkbox formControlName="event">Include Events</mat-checkbox>
+                                </div>
+
+                            <div class="add-full-width">
+                                <mat-checkbox formControlName="expense">Include Expenses</mat-checkbox>
+                            </div>
+
+                            
+                          </div>
+                         
+                          
+                          
+
+                          
                           <!-- <div class="button-row text-center">
                               <button type="submit" [disabled]="!boardsForm.valid" class="btn btn-primary">Generate CSV File</button>
                           </div> -->

@@ -55,7 +55,8 @@ import {
   MatDialogModule,
   MatExpansionModule,
   MAT_DATE_LOCALE,
-  MatListModule} from '@angular/material';
+  MatListModule,
+  MatCheckboxModule} from '@angular/material';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { TravelItineraryService } from './travel-itinerary.service';
 import { AddTravelItineraryComponent } from './components/add-travel-itinerary/add-travel-itinerary.component';
@@ -129,6 +130,7 @@ import { DatePipe } from '@angular/common';
     MatNativeDateModule,
     MatListModule,
     MatDialogModule,
+    MatCheckboxModule,
     MatExpansionModule,
     MatGoogleMapsAutocompleteModule,
     AgmDirectionModule,
