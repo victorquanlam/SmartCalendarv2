@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "smart-calendar-eb99c"
+    "staging": "swinburnesmartcalendar",
+    "default": "swinburnesmartcalendar"
   }
 }

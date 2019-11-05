@@ -5,13 +5,14 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyB9FgWueAc23WRmXqR-HhOsszPO1TQadA0',
-    authDomain: 'smart-calendar-eb99c.firebaseapp.com',
-    databaseURL: 'https://smart-calendar-eb99c.firebaseio.com',
-    projectId: 'smart-calendar-eb99c',
-    storageBucket: 'smart-calendar-eb99c.appspot.com',
-    messagingSenderId: '86818688461',
-    appId: '1:86818688461:web:bff4abecfac23a3b'
+    apiKey: "AIzaSyAix4OwaOHQWuiA7BMnwpMJj-VRzBtraKA",
+    authDomain: "swinburnesmartcalendar.firebaseapp.com",
+    databaseURL: "https://swinburnesmartcalendar.firebaseio.com",
+    projectId: "swinburnesmartcalendar",
+    storageBucket: "swinburnesmartcalendar.appspot.com",
+    messagingSenderId: "958249816402",
+    appId: "1:958249816402:web:6e20b36d91e3e6fd6eea8b",
+    measurementId: "G-FQ0FKZSH4H"
   }
 };
 

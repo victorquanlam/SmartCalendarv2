@@ -81,15 +81,8 @@ export class AuthService {
   get isLoggedIn(): boolean {
 
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      if (!user.emailVerified) {
-        window.alert('Please verified your email');
-      }
-    } else {
-      window.alert('You are not logged in');
-    }
     // will turn this on when we can set emailVerified by Admin
-    return (user !== null && user.emailVerified !== false) ? true : false;
+    return (user !== null ) ? true : false;
 
   }
 
