@@ -35,8 +35,15 @@ export class UserService {
     }
   }
 
-  deleteUser(userId: string) {
-    this.firestore.doc('users/' + userId).delete();
+  deleteUser(userId: string,userEmail:string,userPassword:string) {
+    
+    this.firestore.doc('users/' + userId).delete().then(() =>{
+      this.afAuth.auth.signInWithEmailAndPassword(userEmail, userPassword)
+        .then(function (info) {
+          var user = this.afAuth.auth.currentUser;
+          user.delete();
+        });
+    })
   }
 
 }

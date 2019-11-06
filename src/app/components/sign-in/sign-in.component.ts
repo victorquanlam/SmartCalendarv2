@@ -15,4 +15,11 @@ export class SignInComponent implements OnInit {
 
   ngOnInit() { }
 
+  keyDownFunction(event) {
+    if(event.keyCode == 13) {
+      alert('you just clicked enter');
+      // rest of your code
+    }
+  }
+
 }

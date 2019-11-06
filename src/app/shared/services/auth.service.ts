@@ -77,6 +77,8 @@ export class AuthService {
     });
   }
 
+  
+
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
 

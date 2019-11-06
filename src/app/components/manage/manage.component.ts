@@ -18,6 +18,8 @@ export class ManageComponent implements OnInit {
   boardsForm: FormGroup;
   roleList =['Admin','Manager','User'];
   uid='';
+  userEmail='';
+  userPassword='';
   isEditing=false;
 
   constructor(private userService: UserService,
@@ -105,7 +107,7 @@ export class ManageComponent implements OnInit {
   // 1.Deletes the currently selected user
   deleteUser() {
     //need to have confirmation box
-    this.userService.deleteUser(this.uid)
+    this.userService.deleteUser(this.uid,this.userEmail,this.userPassword)
   }
 
 
@@ -126,6 +128,8 @@ export class ManageComponent implements OnInit {
       const tmp: any = data.payload.data();
       if(tmp) {
         this.uid = id;
+        this.userEmail = tmp.userEmail;
+        this.userPassword = tmp.userPassword;
         this.boardsForm.setValue({
           uid: id,
           displayName: tmp.displayName?tmp.displayName:'',
