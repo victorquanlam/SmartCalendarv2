@@ -12,7 +12,7 @@
     "cacheConfig": {
       "maxSize": 10000,
       "maxAge": "1h",
-      "timeout": "2s",
+      "timeout": "10m",
       "strategy": "freshness"
     }
   }, {
@@ -22,6 +22,7 @@
     "cacheConfig": {
       "maxSize": 10000,
       "maxAge": "1d",
+      "timeout": "10m",
       "strategy": "performance"
     }
   }],

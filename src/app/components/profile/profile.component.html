@@ -16,10 +16,11 @@
         </li>
     </ul>
     <span class="nav-item my-lg-0">
-      <a class="nav-link" routerLink="/profile">
-        <button type="button" class="btn btn-circle btn-sm text-center"><i class="fas fa-user user-icon"></i></button>
-     </a>
-    </span>
+            <a class="nav-link" routerLink="/profile">
+              <button type="button" mat-mini-fab color="lightgrey"><mat-icon>person</mat-icon></button>
+              <!-- <button type="button" class="btn btn-circle btn-sm text-center"><i class="fas fa-user user-icon"></i></button> -->
+              </a>
+          </span>
 </nav>
 <!-- Sidebar navigation -->
 <div class="container-fluid">
@@ -28,16 +29,29 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active">
-                            <i class="fas fa-user"></i>User Profile
+                        <a class="nav-link active m-auto">
+                                <mat-icon>person</mat-icon>User Profile
                         </a>
                     </li>
                     <!-- Calling SignOut() Api from AuthService -->
                     <li class="nav-item">
-                        <a class="nav-link" (click)="authService.SignOut()">
-                            <i class="fas fa-sign-out-alt"></i>Log out
+                            <a class="nav-link m-auto" (click)="authService.ForgotPassword(authService.userData.email)">
+                                    <mat-icon >settings_backup_restore</mat-icon>Change Password
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                                <a class="nav-link m-auto" (click)="edit(authService.userData.uid)">
+                                        <mat-icon >edit</mat-icon>Edit
+                                </a>
+                            </li>
+                    <li class="nav-item">
+                        <a class="nav-link m-auto" (click)="authService.SignOut()">
+                                <mat-icon >keyboard_backspace</mat-icon>Log out
                         </a>
                     </li>
+                    
+                    
                 </ul>
             </div>
         </nav>
@@ -54,9 +68,58 @@
                             <img class="align-self-start mr-5 img-thumbnail rounded-circle" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" alt="{{user.displayName}}">
                             <div class="media-body">
                                 <h1>Hello: <strong>{{(user.displayName) ? user.displayName : 'User'}}</strong></h1>
-                                <p>User ID: <strong>{{user.uid}}</strong></p>
-                                <p>Email: <strong>{{user.email}}</strong></p>
-                                <p>Email Verified: <strong>{{user.emailVerified}}</strong></p>
+                                <form  [hidden]="!isEditing" [formGroup]="boardsForm" (ngSubmit)="updateUser(boardsForm.value)">
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="Display Name" formControlName="displayName">
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('displayName').valid && boardsForm.get('displayName').touched">Please enter Display Name</span>
+                                            </mat-error>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="First Name" formControlName="firstName">
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('firstName').valid && boardsForm.get('firstName').touched">Please enter First Name</span>
+                                            </mat-error>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="Last Name" formControlName="lastName">
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('lastName').valid && boardsForm.get('lastName').touched">Please enter Last Name</span>
+                                            </mat-error>
+                                        </mat-form-field>
+            
+            
+                                        <mat-form-field class="add-full-width">
+                                            <input matInput placeholder="Email" formControlName="email">
+                                            <mat-error>
+                                                <span *ngIf="!boardsForm.get('email').valid && boardsForm.get('email').touched">Please enter Email</span>
+                                            </mat-error>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="add-full-width">
+                                                <input matInput placeholder="User Id" formControlName="uid" >
+                                                <mat-error>
+                                                    <span *ngIf="!boardsForm.get('uid').valid && boardsForm.get('uid').touched"  >Please enter User Id</span>
+                                                </mat-error>
+                                            </mat-form-field>
+            
+            
+                                        <mat-form-field class="add-full-width">
+                                            <mat-label>Role</mat-label>
+                                            <mat-select formControlName="role">
+                                                <mat-option *ngFor="let role of roleList" [value]="role">{{role}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+            
+            
+            
+            
+                                        <div class="button-row">
+                                            <button type="submit" [hidden]="!isEditing" [disabled]="!boardsForm.valid" mat-mini-fab color="primary"><mat-icon>save</mat-icon></button>
+                                        </div>
+                                    </form>
                             </div>
                         </div>
                     </div>
