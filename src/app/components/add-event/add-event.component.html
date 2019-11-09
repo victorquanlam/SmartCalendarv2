@@ -6,7 +6,7 @@
   </a>
   <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-          <a class="nav-link" routerLink="/time-table">Time Table</a>
+          <a class="nav-link" routerLink="/time-table">Timetable</a>
       </li>
       <li class="nav-item">
           <a class="nav-link" routerLink="/manage">Manage</a>
@@ -72,7 +72,7 @@
                                 (onLocationSelected)="onLocationSelected($event)">
                                 <button mat-button type="button" *ngIf="boardsForm.get('location').value" matSuffix mat-icon-button aria-label="Clear" (click)="boardsForm.controls['location'].patchValue('', {emitEvent: true})">
                                     <mat-icon>close</mat-icon>
-                                    </button> 
+                                </button> 
                             <mat-error>
                                 <span *ngIf="!boardsForm.get('location').valid && boardsForm.get('location').touched">Please enter Location</span>
                             </mat-error>
