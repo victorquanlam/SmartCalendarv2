@@ -102,11 +102,16 @@ export class DashboardComponent implements OnInit {
   getCurrentUserData(id:string) {
     return new Promise((resolve, reject) => {
 
-      this.userService.getOneUser(id).subscribe(data => {
-        const tmp: any = data.payload.data();
-        this.userEnableEmail=tmp.emailVerified
-        resolve("completed");
-      })
+      if(this.userService){
+        this.userService.getOneUser(id).subscribe(data => {
+          const tmp: any = data.payload.data();
+          if(tmp){
+            this.userEnableEmail=tmp.emailVerified
+          }
+          resolve("completed");
+        })
+      }
+      
     });
 
     
