@@ -216,6 +216,9 @@ export class DashboardComponent implements OnInit {
 
   myTripFilterByEmail(itineraries: TravelItinerary[], email:string):TravelItinerary[] {
     const result = itineraries.filter( function (itinerary) {
+      if(itinerary && itinerary.users != null){
+        return false
+      }
       if(itinerary.users){
         if(itinerary.users.filter( x=> x.email === email).length>0){
           return true
@@ -224,6 +227,7 @@ export class DashboardComponent implements OnInit {
     })
     return result
   }
+  
 
   setDateFilter (item) {
     
