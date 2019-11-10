@@ -71,15 +71,17 @@ export class DashboardComponent implements OnInit {
       
       // filter Travel Ititnerary to my trip only by default
       if(this.authService && this.authService.userData){
-        this.getCurrentUserData(this.authService.userData.uid).then(() =>{
-          if(!this.userEnableEmail) {
-            alert('Your account is disabled. Please contact Administrator')
-            this.authService.SignOut()
-          }
-        })
+        
         
         this.myTravelItinerary = this.myTripFilterByEmail(this.travelItinerary,this.authService.userData.email)
       }
+
+      this.getCurrentUserData(this.authService.userData.uid).then(() =>{
+        if(!this.userEnableEmail) {
+          alert('Your account is disabled. Please contact Administrator')
+          this.authService.SignOut()
+        }
+      })
       this.setValue('default')
       this.spinner.hide();
     })
@@ -102,7 +104,6 @@ export class DashboardComponent implements OnInit {
   getCurrentUserData(id:string) {
     return new Promise((resolve, reject) => {
 
-      if(this.userService){
         this.userService.getOneUser(id).subscribe(data => {
           const tmp: any = data.payload.data();
           if(tmp){
@@ -110,7 +111,6 @@ export class DashboardComponent implements OnInit {
           }
           resolve("completed");
         })
-      }
       
     });
 
