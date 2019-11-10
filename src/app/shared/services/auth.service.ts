@@ -91,12 +91,6 @@ export class AuthService {
   get isLoggedIn(): boolean {
 
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      if (!user.emailVerified) {
-        console.log(user.emailVerified)
-        return;
-      }
-    }
     // will turn this on when we can set emailVerified by Admin
     return (user !== null ) ? true : false;
 
@@ -135,7 +129,6 @@ export class AuthService {
       lastName: user.lastName?user.lastName:'',
       role: user.role? user.role: ''
     };
-    console.log(userData)
     return userRef.set(userData, {
       merge: true
     });
@@ -143,7 +136,9 @@ export class AuthService {
 
 
   // Sign out
-  SignOut() {
+ async SignOut() {
+  const keys = await window.caches.keys();
+  await Promise.all(keys.map(key => caches.delete(key)));
     return this.afAuth.auth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigate(['sign-in']);

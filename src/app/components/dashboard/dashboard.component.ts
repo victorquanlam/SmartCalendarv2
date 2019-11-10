@@ -68,7 +68,9 @@ export class DashboardComponent implements OnInit {
       this.allTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()})
       
       // filter Travel Ititnerary to my trip only by default
-      this.myTravelItinerary = this.myTripFilterByEmail(this.travelItinerary,this.authService.userData.email)
+      if(this.authService.userData){
+        this.myTravelItinerary = this.myTripFilterByEmail(this.travelItinerary,this.authService.userData.email)
+      }
       this.setValue('default')
       this.spinner.hide();
     })
