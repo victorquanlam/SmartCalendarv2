@@ -33,6 +33,14 @@ export class AuthService {
     });
   }
 
+  ngOnInit() {
+    for (var key in localStorage) {
+      if (key.includes('firebaseio.com')) {
+        localStorage.removeItem(key);
+          }
+      }
+   }
+
   // Sign in with email/password
   SignIn(email, password) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
@@ -83,6 +91,12 @@ export class AuthService {
   get isLoggedIn(): boolean {
 
     const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      if (!user.emailVerified) {
+        console.log(user.emailVerified)
+        return;
+      }
+    }
     // will turn this on when we can set emailVerified by Admin
     return (user !== null ) ? true : false;
 

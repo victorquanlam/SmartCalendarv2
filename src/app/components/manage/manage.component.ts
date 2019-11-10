@@ -21,6 +21,7 @@ export class ManageComponent implements OnInit {
   userEmail='';
   userPassword='';
   isEditing=false;
+  accountEnabled=true;
 
   constructor(private userService: UserService,
     private router: Router, private route: ActivatedRoute,
@@ -37,6 +38,7 @@ export class ManageComponent implements OnInit {
       'firstName' : [null],
       'lastName' : [null],
       'role' : [null, Validators.required],
+      'emailVerified' : [null],
       'uid' : [null, Validators.required],
     });
     this.boardsForm.controls['uid'].disable()
@@ -83,6 +85,7 @@ export class ManageComponent implements OnInit {
         'firstName' : [null],
         'lastName' : [null],
         'role' : [null, Validators.required],
+        'emailVerified' : [null],
         'uid' : [null]
       });
       this.boardsForm.controls['uid'].disable()
@@ -95,6 +98,7 @@ export class ManageComponent implements OnInit {
       'firstName' : [null],
       'lastName' : [null],
       'role' : [null, Validators.required],
+      'emailVerified' : [null],
       'uid' : [null],
     });
     this.boardsForm.controls['uid'].disable()
@@ -120,22 +124,21 @@ export class ManageComponent implements OnInit {
   // 2.Changes the add button's text to "Clear Fields to Add"
   pullUserDataClicked(id) {
     (<HTMLInputElement>document.getElementById("updateBtn")).disabled =false;
-    (<HTMLInputElement>document.getElementById("deleteBtn")).disabled =false;
     (<HTMLInputElement>document.getElementById("passResetBtn")).disabled =false;
-    (<HTMLInputElement>document.getElementById("addBtn")).disabled =false;
-    (<HTMLInputElement>document.getElementById("addBtn")).value = 'Clear Fields to Add';
     this.userService.getOneUser(id).subscribe(data => {
       const tmp: any = data.payload.data();
       if(tmp) {
         this.uid = id;
         this.userEmail = tmp.userEmail;
         this.userPassword = tmp.userPassword;
+        this.accountEnabled = tmp.emailVerified;
         this.boardsForm.setValue({
           uid: id,
           displayName: tmp.displayName?tmp.displayName:'',
           email:tmp.email,
           firstName: tmp.firstName?tmp.firstName:'',
           lastName: tmp.lastName?tmp.lastName:'',
+          emailVerified: tmp.emailVerified,
           role: tmp.role?tmp.role:''
           
         });
