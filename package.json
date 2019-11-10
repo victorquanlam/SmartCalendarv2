@@ -41,6 +41,7 @@
     "ngx-filter-pipe": "^2.1.2",
     "ngx-spinner": "^7.2.0",
     "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.5.3",
     "xlsx": "^0.15.1",
     "zone.js": "~0.8.26"
   },

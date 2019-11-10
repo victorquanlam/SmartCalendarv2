@@ -5,6 +5,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { UserService } from '../../user.service';
+import 'rxjs/add/operator/first';
+import 'rxjs-compat/add/operator/first';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +145,10 @@ export class AuthService {
       localStorage.removeItem('user');
       this.router.navigate(['sign-in']);
     });
+  }
+
+  deleteUser () {
+    this.afAuth.authState.first().subscribe((authState) => { authState.delete(); });
   }
 
 }

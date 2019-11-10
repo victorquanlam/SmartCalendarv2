@@ -40,11 +40,16 @@
                             </a>
                         </li>
 
+                    <li class="nav-item">
+                            <a class="nav-link m-auto" (click)="edit(authService.userData.uid)">
+                                    <mat-icon >edit</mat-icon>Edit
+                            </a>
+                        </li>
                         <li class="nav-item">
-                                <a class="nav-link m-auto" (click)="edit(authService.userData.uid)">
-                                        <mat-icon >edit</mat-icon>Edit
-                                </a>
-                            </li>
+                            <a class="nav-link m-auto" (click)="open(content)">
+                                    <mat-icon >delete</mat-icon>Delete
+                            </a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link m-auto" (click)="authService.SignOut()">
                                 <mat-icon >keyboard_backspace</mat-icon>Log out
@@ -129,3 +134,22 @@
         </main>
     </div>
 </div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Are you sure?</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+       <!-- Modal body -->
+       <div class="modal-body">
+        Do you really want to delete this account? This process cannot be undone
+        </div>  
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="delete(authService.userData.uid);modal.dismiss('Cross click')">Delete</button>
+    </div>
+  </ng-template>

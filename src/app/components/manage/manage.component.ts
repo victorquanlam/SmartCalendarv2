@@ -107,13 +107,6 @@ export class ManageComponent implements OnInit {
     
   }
 
-  // Runs when a user is selected from the list and delete is clicked
-  // 1.Deletes the currently selected user
-  deleteUser() {
-    //need to have confirmation box
-    this.userService.deleteUser(this.uid,this.userEmail,this.userPassword)
-  }
-
 
   onFormSubmit(result) {
 

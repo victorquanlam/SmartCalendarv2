@@ -35,15 +35,8 @@ export class UserService {
     }
   }
 
-  deleteUser(userId: string,userEmail:string,userPassword:string) {
-    
-    this.firestore.doc('users/' + userId).delete().then(() =>{
-      this.afAuth.auth.signInWithEmailAndPassword(userEmail, userPassword)
-        .then(function (info) {
-          var user = this.afAuth.auth.currentUser;
-          user.delete();
-        });
-    })
+  async deleteUserData(id:String){
+    this.firestore.doc('users/' + id).delete();
   }
 
 }

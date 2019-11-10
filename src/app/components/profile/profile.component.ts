@@ -3,6 +3,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { User } from 'src/app/user.model';
 import { UserService } from '../../user.service';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormsModule } from '@angular/forms';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-profile',
@@ -13,13 +14,15 @@ export class ProfileComponent implements OnInit {
 
   constructor(public authService: AuthService,
               public userService: UserService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder,
+              private modalService: NgbModal) { }
 
               boardsForm: FormGroup;
   user: User;
 
   isEditing=false;
   uid='';
+  closeResult: string;
   role='';
   roleList =['Admin','Manager','User'];
   ngOnInit() {
@@ -35,6 +38,28 @@ export class ProfileComponent implements OnInit {
     
     
     
+  }
+
+  delete(id:string){
+    this.userService.deleteUserData(id)
+    this.authService.deleteUser()
+  }
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 
   edit(id:string){

@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit {
   users: User[];
   myData : User;
   trip: Trip[];
+  userEnableEmail:boolean;
   myTravelItinerary: TravelItinerary[];
   allTravelItinerary: TravelItinerary[];
   selectedTravelItitnerary: TravelItinerary[];
@@ -59,6 +60,7 @@ export class DashboardComponent implements OnInit {
     this.getTravelItitnerary().then(() => {
       this.getUser();
       this.getTrip();
+      
       let itineraries= [];
       this.travelItinerary.forEach(function(snapshot) {
         if(snapshot.endsAt.toDate()>=  new Date()){
@@ -68,7 +70,14 @@ export class DashboardComponent implements OnInit {
       this.allTravelItinerary = itineraries.sort(function(a,b){ return b.startsAt.toDate() - a.startsAt.toDate()})
       
       // filter Travel Ititnerary to my trip only by default
-      if(this.authService.userData){
+      if(this.authService && this.authService.userData){
+        this.getCurrentUserData(this.authService.userData.uid).then(() =>{
+          if(!this.userEnableEmail) {
+            alert('Your account is disabled. Please contact Administrator')
+            this.authService.SignOut()
+          }
+        })
+        
         this.myTravelItinerary = this.myTripFilterByEmail(this.travelItinerary,this.authService.userData.email)
       }
       this.setValue('default')
@@ -88,6 +97,19 @@ export class DashboardComponent implements OnInit {
         resolve("completed");
       })
     });
+  }
+
+  getCurrentUserData(id:string) {
+    return new Promise((resolve, reject) => {
+
+      this.userService.getOneUser(id).subscribe(data => {
+        const tmp: any = data.payload.data();
+        this.userEnableEmail=tmp.emailVerified
+        resolve("completed");
+      })
+    });
+
+    
   }
 
   getUser() {
