@@ -373,6 +373,11 @@ a:not([href]):not([tabindex]):hover {
   padding-top: 48px;
 }
 
+.good-style {
+  margin-right:0 !important ;
+  margin-left:0 !important ;
+}
+
 .dasboard-text {
   border-left: 1px solid rgb(255, 255, 255, .3);
   color: rgb(255, 255, 255, .5);
