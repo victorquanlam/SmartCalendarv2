@@ -6,7 +6,7 @@
     </a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" routerLink="/time-table">Time Table</a>
+            <a class="nav-link" routerLink="/time-table">Timetable</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" routerLink="/manage">Manage</a>
@@ -58,7 +58,7 @@
                                   </mat-error>
                               </mat-form-field>
                               <mat-form-field class="add-full-width">
-                                  <input matInput placeholder="Start Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
+                                  <input matInput placeholder="End Date"  [value]="endsAt" formControlName="endsAt" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6">
                                   <owl-date-time [pickerMode]="'dialog'" #dt6></owl-date-time>
                                   <mat-error>
                                       <span *ngIf="!boardsForm.get('endsAt').valid && boardsForm.get('endsAt').touched">Please enter End Date</span>
