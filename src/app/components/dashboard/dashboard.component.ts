@@ -75,16 +75,18 @@ export class DashboardComponent implements OnInit {
         
         this.myTravelItinerary = this.myTripFilterByEmail(this.travelItinerary,this.authService.userData.email)
       }
-
+      this.setValue('default')
+      this.spinner.hide();
+    })
+    if(this.authService && this.authService.userData){
       this.getCurrentUserData(this.authService.userData.uid).then(() =>{
         if(!this.userEnableEmail) {
           alert('Your account is disabled. Please contact Administrator')
           this.authService.SignOut()
         }
       })
-      this.setValue('default')
-      this.spinner.hide();
-    })
+    }
+    
   }
 
   getTravelItitnerary() {
@@ -103,9 +105,9 @@ export class DashboardComponent implements OnInit {
 
   getCurrentUserData(id:string) {
     return new Promise((resolve, reject) => {
-
         this.userService.getOneUser(id).subscribe(data => {
           const tmp: any = data.payload.data();
+          console.log(tmp)
           if(tmp){
             this.userEnableEmail=tmp.emailVerified
           }
@@ -221,10 +223,7 @@ export class DashboardComponent implements OnInit {
 
   myTripFilterByEmail(itineraries: TravelItinerary[], email:string):TravelItinerary[] {
     const result = itineraries.filter( function (itinerary) {
-      if(itinerary && itinerary.users != null){
-        return false
-      }
-      if(itinerary.users){
+      if(itinerary &&  itinerary.users!= null){
         if(itinerary.users.filter( x=> x.email === email).length>0){
           return true
         }

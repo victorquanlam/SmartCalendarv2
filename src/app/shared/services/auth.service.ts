@@ -148,7 +148,7 @@ export class AuthService {
   }
 
   deleteUser () {
-    this.afAuth.authState.first().subscribe((authState) => { authState.delete(); });
+    this.afAuth.authState.subscribe((authState) => { authState.delete(); });
   }
 
 }
